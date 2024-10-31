@@ -17,8 +17,6 @@ export const sessionMiddleware = createMiddleware<AdditionalContext>(
   async (c, next) => {
     const session = getCookie(c, "nimbus-auth-cookie")
 
-    console.log(session)
-
     if (!session) {
       return c.json({ error: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED)
     }
