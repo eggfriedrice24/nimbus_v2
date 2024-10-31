@@ -1,5 +1,6 @@
 import { db } from "@/server/db"
 import { users } from "@/server/db/schema/user"
+import { sessionMiddleware } from "@/server/session-middleware"
 import { zValidator } from "@hono/zod-validator"
 import bcrypt from "bcryptjs"
 import { Hono } from "hono"
@@ -11,6 +12,11 @@ import { getUserByEmail } from "../queries"
 import { loginSchema, registerSchema } from "../schemas/validations"
 
 const app = new Hono()
+  .get("/current", sessionMiddleware, async (c) => {
+    const user = c.get("user")
+
+    return c.json({ session: user }, HttpStatusCodes.OK)
+  })
   .post("/login", zValidator("json", loginSchema), async (c) => {
     const { email, password } = c.req.valid("json")
 
