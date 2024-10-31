@@ -4,7 +4,7 @@ import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Square as FcGoogle, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { type z } from "zod"
 
 import { cn } from "@/lib/utils"
 
@@ -49,7 +49,7 @@ export function LoginCard() {
   }
 
   return (
-    <Card className="w-full max-w-lg">
+    <Card>
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>

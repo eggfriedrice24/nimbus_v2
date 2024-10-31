@@ -46,7 +46,7 @@ export function SignUpForm() {
   }
 
   return (
-    <Card className="w-full max-w-lg">
+    <Card>
       <CardHeader>
         <CardTitle className="text-xl">Sign Up</CardTitle>
         <CardDescription>
