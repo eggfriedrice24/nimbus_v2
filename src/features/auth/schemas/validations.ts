@@ -20,3 +20,5 @@ export const registerSchema = z.object({
     message: "Name is required!",
   }),
 })
+
+export type RegisterSchemaType = z.infer<typeof registerSchema>
