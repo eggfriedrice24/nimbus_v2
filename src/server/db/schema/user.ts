@@ -65,7 +65,7 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
 }))
 
 // Tyoe Exports
-//
+
 // Select
 export type User = typeof users.$inferSelect
 export const selectUsersSchema = createSelectSchema(users)
@@ -83,5 +83,9 @@ export const insertUsersSchema = createInsertSchema(users, {
     createdAt: true,
     updatedAt: true,
   })
+
 // Patch
 export const patchUsersSchema = insertUsersSchema.partial()
+
+// Enum
+export type UserRole = (typeof userRoles.enumValues)[number]
