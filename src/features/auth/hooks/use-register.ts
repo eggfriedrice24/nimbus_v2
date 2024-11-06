@@ -1,3 +1,5 @@
+"use client"
+
 import { useRouter } from "next/navigation"
 import { client } from "@/server/rpc"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
