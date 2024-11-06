@@ -1,5 +1,6 @@
 "use client"
 
+import { useSession } from "@/features/auth/hooks/use-session"
 import {
   Atom,
   Bot,
@@ -13,7 +14,6 @@ import {
   Rabbit,
   Send,
   Settings2,
-  SquareKanban,
 } from "lucide-react"
 
 import { DottedSeparator } from "@/components/ui/separator"
@@ -21,14 +21,19 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  SidebarRail,
 } from "@/components/ui/sidebar"
 
 import { NavProjects } from ".//nav-projects"
 import { NavMain } from "./nav-main"
-import { NavSecondary } from "./nav-secondary"
 import { NavUser } from "./nav-user"
 import { TeamSwitcher } from "./team-switcher"
 
@@ -50,11 +55,6 @@ const data = {
       plan: "Free",
     },
   ],
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Home",
@@ -69,8 +69,21 @@ const data = {
 
     {
       title: "Settings",
-      url: "/settings",
       icon: Settings2,
+      items: [
+        {
+          title: "General",
+          url: "/settings/general",
+        },
+        {
+          title: "Team",
+          url: "#",
+        },
+        {
+          title: "Billing",
+          url: "#",
+        },
+      ],
     },
     {
       title: "Members",
@@ -91,6 +104,7 @@ const data = {
       icon: Send,
     },
   ],
+
   projects: [
     {
       name: "Design Engineering",
@@ -108,6 +122,7 @@ const data = {
       icon: Map,
     },
   ],
+
   searchResults: [
     {
       title: "Routing Fundamentals",
@@ -143,48 +158,75 @@ const data = {
 }
 
 export function AppSidebar() {
+  const { data: session, isFetched } = useSession()
+
   return (
-    <Sidebar className="bg-accent px-1.5 dark:bg-slate-900">
-      <SidebarHeader className="flex-row items-center gap-2 py-4">
-        <div className="grid size-9 place-items-center rounded-full border bg-primary">
-          <SquareKanban className="stroke-black" />
-        </div>
-        <span className="font-bold">Nimbus</span>
+    <Sidebar collapsible="icon" variant="inset">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <TeamSwitcher teams={data.teams} />
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
 
       <DottedSeparator />
 
       <SidebarContent>
-        <SidebarMenu>
-          <SidebarGroupLabel>Workspaces</SidebarGroupLabel>
-
-          <TeamSwitcher teams={data.teams} />
-        </SidebarMenu>
-
-        <DottedSeparator />
-
-        <SidebarMenu>
-          <NavMain items={data.navMain} searchResults={data.searchResults} />
-        </SidebarMenu>
+        <SidebarGroup>
+          <SidebarGroupLabel className="font-bold">Platform</SidebarGroupLabel>
+          <SidebarMenu>
+            <NavMain items={data.navMain} searchResults={data.searchResults} />
+          </SidebarMenu>
+        </SidebarGroup>
 
         <DottedSeparator />
 
-        <SidebarMenu>
-          <SidebarGroupLabel>Projects</SidebarGroupLabel>
-          <NavProjects projects={data.projects} />
-        </SidebarMenu>
+        <SidebarGroup>
+          <SidebarGroupLabel className="font-bold">Projects</SidebarGroupLabel>
+          <SidebarMenu>
+            <NavProjects projects={data.projects} />
+          </SidebarMenu>
+        </SidebarGroup>
 
-        <SidebarMenu className="mt-auto">
+        <SidebarGroup className="mt-auto">
           <SidebarGroupLabel>Help</SidebarGroupLabel>
-          <NavSecondary items={data.navSecondary} />
-        </SidebarMenu>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {data.navSecondary.map((item) => (
+                <SidebarMenuItem key={item.title} className="min-h-max">
+                  <SidebarMenuButton size="sm" disabled>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       <DottedSeparator className="mt-2" />
 
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            {isFetched ? (
+              <NavUser
+                user={{
+                  name: session?.session.name ?? "",
+                  email: session?.session.email ?? "",
+                  avatar: "/avatars/shadcn.jpg",
+                }}
+              />
+            ) : (
+              <SidebarMenuSkeleton showIcon className="h-10" />
+            )}
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
   )
 }

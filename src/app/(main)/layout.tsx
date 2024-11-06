@@ -1,6 +1,10 @@
 import * as React from "react"
 
-import { SidebarProvider } from "@/components/ui/sidebar"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 
 import { AppSidebar } from "./_components/sidebar/app-sidebar"
 
@@ -20,7 +24,13 @@ export default async function MainLayout({ children }: MainLayoutProps) {
     >
       <AppSidebar />
 
-      <main className="flex-1 p-4">{children}</main>
+      <SidebarInset className="p-4">
+        <div className="flex items-center gap-2">
+          <SidebarTrigger />
+
+          {children}
+        </div>
+      </SidebarInset>
     </SidebarProvider>
   )
 }
