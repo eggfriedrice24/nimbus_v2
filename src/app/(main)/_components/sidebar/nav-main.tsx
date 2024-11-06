@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ChevronRight, type LucideIcon } from "lucide-react"
+import { ChevronRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -19,31 +19,23 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 
+import { type NavItem } from "./sidebar-data"
 import { SidebarSearch } from "./sidebar-search"
 
 export function NavMain({
   items,
   searchResults,
 }: {
-  items: {
-    title: string
-    url: string
-    icon: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: string
-    }[]
-  }[]
+  items: NavItem[]
   searchResults: React.ComponentProps<typeof SidebarSearch>["results"]
 } & React.ComponentProps<"ul">) {
   const pathname = usePathname()
 
-  const isActiveRoute = (url: string, exact = false) => {
+  const isActiveRoute = (url?: string, exact = false) => {
     if (exact) {
       return pathname === url
     } else {
-      return pathname === url || pathname.startsWith(url)
+      return pathname === url || pathname.startsWith(url ?? "")
     }
   }
 
@@ -102,7 +94,7 @@ export function NavMain({
             )}
           >
             <SidebarMenuButton tooltip={item.title} asChild>
-              <Link href={item.url}>
+              <Link href={item.url ?? "#"}>
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </Link>
