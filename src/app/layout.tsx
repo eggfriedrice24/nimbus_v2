@@ -3,6 +3,8 @@ import localFont from "next/font/local"
 
 import "@/styles/globals.css"
 
+import { Toaster } from "sonner"
+
 import QueryProvider from "@/components/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -41,6 +43,7 @@ export default async function RootLayout({
           >
             {children}
           </ThemeProvider>
+          <Toaster />
         </QueryProvider>
       </body>
     </html>
