@@ -73,6 +73,7 @@ export function LoginCard() {
                         id="email"
                         type="email"
                         placeholder="m@example.com"
+                        disabled={isPending}
                       />
                     </FormControl>
 
@@ -103,6 +104,7 @@ export function LoginCard() {
                         id="password"
                         type="password"
                         placeholder="**********"
+                        disabled={isPending}
                       />
                     </FormControl>
 

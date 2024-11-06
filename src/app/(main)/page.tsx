@@ -1,19 +1,14 @@
-"use client"
-
 import * as React from "react"
 
-import { useRouter } from "next/navigation"
-import { useSession } from "@/features/auth/hooks/use-session"
+import { redirect } from "next/navigation"
+import { getServerSession } from "@/features/auth/actions"
 
-export default function Home() {
-  const router = useRouter()
-  const { data, isLoading } = useSession()
+export const dynamic = "force-dynamic"
 
-  React.useEffect(() => {
-    if (!data && !isLoading) {
-      router.push("/sign-in")
-    }
-  }, [data, isLoading, router])
+export default async function Home() {
+  const session = await getServerSession()
+
+  if (!session) redirect("/sign-in")
 
   return (
     <div className="flex-1">

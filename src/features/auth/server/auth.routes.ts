@@ -75,7 +75,7 @@ const app = new Hono()
 
     return c.json(inserted, HttpStatusCodes.CREATED)
   })
-  .post("/logout", (c) => {
+  .post("/logout", sessionMiddleware, (c) => {
     deleteCookie(c, "nimbus-auth-cookie")
 
     return c.json({ success: true })

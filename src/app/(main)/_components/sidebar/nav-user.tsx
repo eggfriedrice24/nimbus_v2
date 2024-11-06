@@ -1,3 +1,4 @@
+import { useLogout } from "@/features/auth/hooks/use-logout"
 import { BadgeCheck, ChevronsUpDown, CreditCard, LogOut } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -22,6 +23,8 @@ export function NavUser({
     avatar: string
   }
 }) {
+  const { mutate } = useLogout()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -79,7 +82,7 @@ export function NavUser({
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="gap-2">
+        <DropdownMenuItem className="gap-2" onClick={() => mutate()}>
           <LogOut className="size-4 text-muted-foreground" />
           Log out
         </DropdownMenuItem>
