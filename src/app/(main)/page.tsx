@@ -14,7 +14,7 @@ export default async function Home() {
   if (!session) redirect("/sign-in")
 
   return (
-    <div className="flex-1">
+    <div className="flex flex-1 flex-col gap-8">
       <div className="flex items-center gap-2">
         <SidebarTrigger />
 
