@@ -1,5 +1,3 @@
-"use server"
-
 import { cookies } from "next/headers"
 import { type User } from "@/server/db/schema/user"
 import { decode } from "hono/jwt"
