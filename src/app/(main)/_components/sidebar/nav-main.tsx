@@ -4,8 +4,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronRight } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-
 import {
   Collapsible,
   CollapsibleContent,
@@ -70,10 +68,7 @@ export function NavMain({
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton
                         asChild
-                        className={cn(
-                          isActiveRoute(subItem.url, true) &&
-                            "bg-secondary text-primary"
-                        )}
+                        isActive={isActiveRoute(subItem.url, true)}
                       >
                         <Link href={subItem.url}>
                           <span>{subItem.title}</span>
@@ -86,14 +81,12 @@ export function NavMain({
             </SidebarMenuItem>
           </Collapsible>
         ) : (
-          <SidebarMenuItem
-            key={item.title}
-            className={cn(
-              "group/collapsible flex items-center",
-              isActiveRoute(item.url, true) && "bg-secondary text-primary"
-            )}
-          >
-            <SidebarMenuButton tooltip={item.title} asChild>
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton
+              tooltip={item.title}
+              isActive={isActiveRoute(item.url, true)}
+              asChild
+            >
               <Link href={item.url ?? "#"}>
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>

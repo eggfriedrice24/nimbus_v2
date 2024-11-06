@@ -15,7 +15,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
-  SidebarRail,
 } from "@/components/ui/sidebar"
 
 import { NavProjects } from ".//nav-projects"
@@ -92,8 +91,6 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
-
-      <SidebarRail />
     </Sidebar>
   )
 }

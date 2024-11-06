@@ -2,15 +2,15 @@ import {
   Atom,
   Bot,
   Eclipse,
-  Frame,
   Home,
   Kanban,
   LifeBuoy,
-  Map,
-  PieChart,
+  Medal,
   Rabbit,
   Send,
   Settings2,
+  UserCog,
+  Webhook,
   type LucideIcon,
 } from "lucide-react"
 
@@ -120,19 +120,19 @@ export const data: Data = {
 
   projects: [
     {
-      name: "Design Engineering",
+      name: "PlayPal",
       url: "#",
-      icon: Frame,
+      icon: Medal,
     },
     {
-      name: "Sales & Marketing",
+      name: "Dealflow",
       url: "#",
-      icon: PieChart,
+      icon: UserCog,
     },
     {
-      name: "Travel",
+      name: "Hono/Openapi Starter",
       url: "#",
-      icon: Map,
+      icon: Webhook,
     },
   ],
 

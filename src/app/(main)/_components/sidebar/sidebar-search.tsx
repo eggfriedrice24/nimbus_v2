@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
+import { SidebarMenuButton } from "@/components/ui/sidebar"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 export function SidebarSearch({
@@ -25,11 +26,13 @@ export function SidebarSearch({
   if (isMobile) {
     return (
       <Drawer>
-        <DrawerTrigger className="flex h-8 w-full min-w-8 flex-1 items-center gap-2 overflow-hidden rounded-md px-1.5 text-sm font-medium outline-none ring-ring transition-all hover:bg-secondary hover:text-secondary-foreground focus-visible:ring-2 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
-          <Search className="size-4 shrink-0" />
-          <div className="flex flex-1 overflow-hidden">
-            <div className="line-clamp-1 pr-6">Search</div>
-          </div>
+        <DrawerTrigger asChild>
+          <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+            <Search className="size-4 shrink-0" />
+            <div className="flex flex-1 overflow-hidden">
+              <p className="line-clamp-1 pr-6">Search</p>
+            </div>
+          </SidebarMenuButton>
         </DrawerTrigger>
         <DrawerContent>
           <form>
@@ -69,11 +72,13 @@ export function SidebarSearch({
 
   return (
     <Popover>
-      <PopoverTrigger className="flex h-8 w-full min-w-8 flex-1 items-center gap-2 overflow-hidden rounded-md px-1.5 text-sm font-medium outline-none ring-ring transition-all hover:bg-secondary hover:text-secondary-foreground focus-visible:ring-2 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground">
-        <Search className="size-4 shrink-0" />
-        <div className="flex flex-1 overflow-hidden">
-          <div className="line-clamp-1 pr-6">Search</div>
-        </div>
+      <PopoverTrigger asChild>
+        <SidebarMenuButton className="data-[state=open]:bg-secondary data-[state=open]:text-primary">
+          <Search className="size-4 shrink-0" />
+          <div className="flex flex-1 overflow-hidden">
+            <p className="line-clamp-1 pr-6">Search</p>
+          </div>
+        </SidebarMenuButton>
       </PopoverTrigger>
       <PopoverContent
         side="right"

@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { SidebarMenuButton } from "@/components/ui/sidebar"
 import { ThemeSwitcher } from "@/components/theme-toggle"
 
 export function NavUser({
@@ -23,24 +24,22 @@ export function NavUser({
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="w-full rounded-md outline-none ring-ring hover:bg-accent focus-visible:ring-2 data-[state=open]:bg-accent">
-        <div className="flex items-center gap-2 px-2 py-1.5 text-left text-sm transition-all">
-          <Avatar className="size-7 rounded-md border">
-            <AvatarImage
-              src={user.avatar}
-              alt={user.name}
-              className="animate-in fade-in-50 zoom-in-90"
-            />
-            <AvatarFallback className="rounded-md">TT</AvatarFallback>
+      <DropdownMenuTrigger asChild>
+        <SidebarMenuButton
+          size="lg"
+          className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+        >
+          <Avatar className="size-8 rounded-lg">
+            <AvatarImage src={user.avatar} alt={user.name} />
+            <AvatarFallback className="rounded-lg">CN</AvatarFallback>
           </Avatar>
-          <div className="grid flex-1 leading-none">
-            <div className="font-medium">{user.name}</div>
-            <div className="overflow-hidden text-xs text-muted-foreground">
-              <div className="line-clamp-1">{user.email}</div>
-            </div>
+
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">{user.name}</span>
+            <span className="truncate text-xs">{user.email}</span>
           </div>
-          <ChevronsUpDown className="ml-auto mr-0.5 size-4 text-muted-foreground/50" />
-        </div>
+          <ChevronsUpDown className="ml-auto size-4" />
+        </SidebarMenuButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-56"
@@ -49,17 +48,21 @@ export function NavUser({
         sideOffset={4}
       >
         <DropdownMenuLabel className="p-0 font-normal">
-          <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm transition-all">
-            <Avatar className="size-7 rounded-md">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div className="grid flex-1">
-              <div className="font-medium">{user.name}</div>
-              <div className="overflow-hidden text-xs text-muted-foreground">
-                <div className="line-clamp-1">{user.email}</div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm transition-all">
+              <Avatar className="size-7 rounded-md">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1">
+                <div className="font-medium">{user.name}</div>
+                <div className="overflow-hidden text-xs text-muted-foreground">
+                  <div className="line-clamp-1">{user.email}</div>
+                </div>
               </div>
             </div>
+
+            <ThemeSwitcher />
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -72,17 +75,10 @@ export function NavUser({
             <CreditCard className="size-4 text-muted-foreground" />
             Billing
           </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-
-          <div className="flex items-center justify-between px-2 py-1.5">
-            <span className="text-sm font-semibold text-muted-foreground">
-              Theme
-            </span>
-            <ThemeSwitcher />
-          </div>
         </DropdownMenuGroup>
+
         <DropdownMenuSeparator />
+
         <DropdownMenuItem className="gap-2">
           <LogOut className="size-4 text-muted-foreground" />
           Log out
