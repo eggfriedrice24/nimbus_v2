@@ -94,7 +94,7 @@ export default function CreateWorkspaceForm({
     </Dialog>
   )
 }
-function CreateWorkspaceCard() {
+export function CreateWorkspaceCard() {
   const { mutate, isPending } = useCreateWorkspace()
 
   const router = useRouter()

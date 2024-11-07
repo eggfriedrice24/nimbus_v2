@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { ChevronRight } from "lucide-react"
 
 import {
@@ -29,11 +30,16 @@ export function NavMain({
 } & React.ComponentProps<"ul">) {
   const pathname = usePathname()
 
+  const workspaceId = useWorkspaceId()
+
   const isActiveRoute = (url?: string, exact = false) => {
     if (exact) {
-      return pathname === url
+      return pathname === `/workspaces/${workspaceId}${url}`
     } else {
-      return pathname === url || pathname.startsWith(url ?? "")
+      return (
+        pathname === `/workspaces/${workspaceId}${url}` ||
+        pathname.startsWith(`/workspaces/${workspaceId}${url}`)
+      )
     }
   }
 
@@ -87,7 +93,7 @@ export function NavMain({
               isActive={isActiveRoute(item.url, true)}
               asChild
             >
-              <Link href={item.url ?? "#"}>
+              <Link href={`/workspaces/${workspaceId}${item.url}`}>
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
               </Link>

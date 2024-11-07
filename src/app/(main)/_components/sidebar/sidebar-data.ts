@@ -45,7 +45,7 @@ export const data: Data = {
   navMain: [
     {
       title: "Home",
-      url: "/",
+      url: "",
       icon: Home,
     },
     {
@@ -60,21 +60,8 @@ export const data: Data = {
     },
     {
       title: "Settings",
+      url: "/settings",
       icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "/settings/general",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-      ],
     },
   ],
 

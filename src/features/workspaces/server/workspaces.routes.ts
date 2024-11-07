@@ -1,6 +1,7 @@
 import { db } from "@/server/db"
 import { workspaces } from "@/server/db/schema"
 import { MemberRole, members } from "@/server/db/schema/members"
+import { patchWorkspaceSchema } from "@/server/db/schema/workspaces"
 import { sessionMiddleware } from "@/server/session-middleware"
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
@@ -66,6 +67,15 @@ const app = new Hono()
       }))!
 
       return c.json(insertedWorkspace, HttpStatusCodes.OK)
+    }
+  )
+  .patch(
+    "/:workspaceId",
+    zValidator("json", patchWorkspaceSchema),
+    sessionMiddleware,
+    async (c) => {
+      const { workspaceId } = c.req.param()
+      const { name, imageUrl } = c.req.valid("json")
     }
   )
 
