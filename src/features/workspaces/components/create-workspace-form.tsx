@@ -58,7 +58,7 @@ export default function CreateWorkspaceForm() {
             <CardTitle className="text-3xl font-bold">
               Create Workspace
             </CardTitle>
-            <CardDescription className="mt-2">
+            <CardDescription>
               Enter a name for your new workspace and start collaborating!
             </CardDescription>
           </div>
@@ -69,7 +69,7 @@ export default function CreateWorkspaceForm() {
       <Form {...form}>
         <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
               <Label htmlFor="name">Workspace Name</Label>
 
               <FormField

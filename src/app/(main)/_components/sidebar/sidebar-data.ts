@@ -1,24 +1,15 @@
 import {
-  Atom,
   Bot,
-  Eclipse,
   Home,
   Kanban,
   LifeBuoy,
   Medal,
-  Rabbit,
   Send,
   Settings2,
   UserCog,
   Webhook,
   type LucideIcon,
 } from "lucide-react"
-
-export interface Team {
-  name: string
-  logo: LucideIcon
-  plan: string
-}
 
 export interface NavItem {
   title: string
@@ -44,7 +35,6 @@ export interface SearchResult {
 }
 
 export interface Data {
-  teams: Team[]
   navMain: NavItem[]
   navSecondary: NavItem[]
   projects: Project[]
@@ -52,23 +42,6 @@ export interface Data {
 }
 
 export const data: Data = {
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: Atom,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: Eclipse,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Rabbit,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Home",

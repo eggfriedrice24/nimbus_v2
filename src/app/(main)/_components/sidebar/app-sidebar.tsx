@@ -21,7 +21,7 @@ import { NavProjects } from ".//nav-projects"
 import { NavMain } from "./nav-main"
 import { NavUser } from "./nav-user"
 import { data } from "./sidebar-data"
-import { TeamSwitcher } from "./team-switcher"
+import { WorkspaceSwitcher } from "./workspace-switcher"
 
 export function AppSidebar() {
   const { data: session, isFetched } = useSession()
@@ -31,7 +31,7 @@ export function AppSidebar() {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <TeamSwitcher teams={data.teams} />
+            <WorkspaceSwitcher />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

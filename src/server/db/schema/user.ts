@@ -67,7 +67,7 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
 }))
 
-// Tyoe Exports
+// Type Exports
 
 // Select
 export type User = typeof users.$inferSelect
