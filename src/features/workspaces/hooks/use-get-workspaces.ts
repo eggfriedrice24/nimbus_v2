@@ -1,8 +1,11 @@
 import { client } from "@/server/rpc"
 import { useQuery } from "@tanstack/react-query"
+import { type InferResponseType } from "hono"
+
+type ResponseType = InferResponseType<typeof client.api.workspaces.$get>
 
 export function useGetWorkspaces() {
-  const mutation = useQuery({
+  const mutation = useQuery<ResponseType>({
     queryKey: ["workspaces"],
     queryFn: async () => {
       const res = await client.api.workspaces.$get()

@@ -1,6 +1,6 @@
 import { db } from "@/server/db"
 import { workspaces } from "@/server/db/schema"
-import { members } from "@/server/db/schema/members"
+import { MemberRole, members } from "@/server/db/schema/members"
 import { sessionMiddleware } from "@/server/session-middleware"
 import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
@@ -13,7 +13,15 @@ const app = new Hono()
     const workspacesList = await db.query.workspaces.findMany({
       with: {
         user: true,
+        members: true,
       },
+      where: (workspaces, { exists, eq }) =>
+        exists(
+          db
+            .select()
+            .from(members)
+            .where(eq(members.workspaceId, workspaces.id))
+        ),
     })
 
     return c.json(workspacesList)
@@ -38,7 +46,7 @@ const app = new Hono()
             .values({
               userId: user.id ?? "",
               workspaceId: workspace.id,
-              role: "ADMIN",
+              role: MemberRole.ADMIN,
             })
             .returning()
         }

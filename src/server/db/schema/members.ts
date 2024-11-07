@@ -5,7 +5,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { users } from "./user"
 import { workspaces } from "./workspaces"
 
-export const members = pgTable("workspace", {
+export const members = pgTable("members", {
   id: varchar("id", { length: 255 })
     .notNull()
     .primaryKey()
@@ -16,7 +16,7 @@ export const members = pgTable("workspace", {
   workspaceId: varchar("workspace_id", { length: 255 })
     .notNull()
     .references(() => workspaces.id),
-  role: varchar("workspace_id", {
+  role: varchar("role", {
     length: 30,
     enum: ["ADMIN", "MEMBER"],
   }).notNull(),
@@ -26,7 +26,7 @@ export const members = pgTable("workspace", {
     .$onUpdate(() => new Date()),
 })
 
-export const memberRelations = relations(workspaces, ({ one }) => ({
+export const memberRelations = relations(members, ({ one }) => ({
   user: one(users, { fields: [members.userId], references: [users.id] }),
   workspace: one(workspaces, {
     fields: [members.workspaceId],
@@ -56,3 +56,9 @@ export const insertMemberSchema = createInsertSchema(members)
 
 // Patch
 export const patchMemberSchema = insertMemberSchema.partial()
+
+// Enum
+export enum MemberRole {
+  ADMIN = "ADMIN",
+  MEMBER = "MEMBER",
+}
