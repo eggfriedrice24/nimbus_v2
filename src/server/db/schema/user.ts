@@ -11,6 +11,7 @@ import {
 } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
+import { members } from "./members"
 import { workspaces } from "./workspaces"
 
 export const userRoles = pgEnum(`user_roles`, ["admin", "user"])
@@ -34,6 +35,7 @@ export const users = pgTable("user", {
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   workspaces: many(workspaces),
+  members: many(members),
 }))
 
 export const accounts = pgTable(
