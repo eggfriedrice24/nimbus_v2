@@ -11,6 +11,8 @@ export const workspaces = pgTable("workspace", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: varchar("name", { length: 255 }).notNull(),
+  imageUrl: varchar("image_url", { length: 500 }),
+  inviteCode: varchar("invite_code", { length: 10 }),
   userId: varchar("user_id", { length: 255 })
     .notNull()
     .references(() => users.id),

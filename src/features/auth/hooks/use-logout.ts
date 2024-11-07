@@ -20,6 +20,7 @@ export function useLogout() {
     onSuccess: () => {
       router.refresh()
       void queryClient.invalidateQueries({ queryKey: ["session"] })
+      void queryClient.invalidateQueries({ queryKey: ["workspaces"] })
     },
   })
 

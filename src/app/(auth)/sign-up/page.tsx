@@ -1,8 +1,8 @@
 import * as React from "react"
 
 import { redirect } from "next/navigation"
-import { getServerSession } from "@/features/auth/actions"
 import { SignUpForm } from "@/features/auth/components/sign-up-card"
+import { getServerSession } from "@/features/auth/queries"
 
 export const dynamic = "force-dynamic"
 

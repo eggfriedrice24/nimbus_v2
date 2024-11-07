@@ -1,10 +1,6 @@
-import * as React from "react"
-
 import { redirect } from "next/navigation"
-import { getServerSession } from "@/features/auth/actions"
-import CreateWorkspaceForm from "@/features/workspaces/components/create-workspace-form"
-
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import { getServerSession } from "@/features/auth/queries"
+import { getWorkspaces } from "@/features/workspaces/queries"
 
 export const dynamic = "force-dynamic"
 
@@ -13,15 +9,11 @@ export default async function Home() {
 
   if (!session) redirect("/sign-in")
 
-  return (
-    <div className="flex flex-1 flex-col gap-8">
-      <div className="flex items-center gap-2">
-        <SidebarTrigger />
+  const workspaces = await getWorkspaces()
 
-        <h1 className="text-xl font-bold">Welcome back!</h1>
-      </div>
-
-      <CreateWorkspaceForm />
-    </div>
-  )
+  if (workspaces.length === 0) {
+    redirect("/workspaces/create")
+  } else {
+    redirect(`/workspaces/${workspaces[0]?.id}`)
+  }
 }

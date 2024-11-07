@@ -6,21 +6,28 @@ import { zValidator } from "@hono/zod-validator"
 import { Hono } from "hono"
 import * as HttpStatusCodes from "stoker/http-status-codes"
 
+import { generateInviteCode } from "@/lib/utils"
+
 import { createWorkspaceSchema } from "../schemas/validations"
 
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
+    const user = c.get("user")
+
     const workspacesList = await db.query.workspaces.findMany({
       with: {
         user: true,
         members: true,
       },
-      where: (workspaces, { exists, eq }) =>
-        exists(
-          db
-            .select()
-            .from(members)
-            .where(eq(members.workspaceId, workspaces.id))
+      where: (workspaces, { exists, eq, and }) =>
+        and(
+          exists(
+            db
+              .select()
+              .from(members)
+              .where(eq(members.workspaceId, workspaces.id))
+          ),
+          eq(workspaces.userId, user.id ?? "")
         ),
     })
 
@@ -37,7 +44,11 @@ const app = new Hono()
       const insertedWorkspace = (await db.transaction(async (trx) => {
         const [workspace] = await trx
           .insert(workspaces)
-          .values({ name, userId: user.id ?? "" })
+          .values({
+            name,
+            userId: user.id ?? "",
+            inviteCode: generateInviteCode(10),
+          })
           .returning()
 
         if (workspace) {

@@ -1,6 +1,9 @@
+import { cookies } from "next/headers"
 import { db } from "@/server/db"
 import { users } from "@/server/db/schema"
+import { type User } from "@/server/db/schema/user"
 import { eq } from "drizzle-orm"
+import { decode } from "hono/jwt"
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -20,4 +23,16 @@ export const getUserById = async (id: string) => {
   } catch {
     return []
   }
+}
+
+export const getServerSession = async () => {
+  const session = cookies().get("nimbus-auth-cookie")
+
+  if (!session) {
+    return null
+  }
+
+  const user = decode(session.value).payload as User
+
+  return user
 }
