@@ -4,9 +4,9 @@ import * as React from "react"
 
 import { useRouter } from "next/navigation"
 import CreateWorkspaceForm from "@/features/workspaces/components/create-workspace-form"
+import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
 import { useGetWorkspaces } from "@/features/workspaces/hooks/use-get-workspaces"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
-import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/useCreateWorkspaceModal"
 import { BriefcaseBusiness, ChevronsUpDown, CircuitBoard } from "lucide-react"
 
 import {
@@ -39,29 +39,27 @@ export function WorkspaceSwitcher() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton
-            size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-          >
-            {isLoading ? (
-              <Skeleton className="h-10 w-full rounded" />
-            ) : (
-              <>
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <BriefcaseBusiness className="size-4 stroke-primary" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    {activeWorkspace?.name}
-                  </span>
-                  <span className="truncate text-xs">
-                    {activeWorkspace?.user.name}
-                  </span>
-                </div>
-                <ChevronsUpDown className="ml-auto" />
-              </>
-            )}
-          </SidebarMenuButton>
+          {isLoading ? (
+            <Skeleton className="h-10 w-full rounded" />
+          ) : (
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            >
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <BriefcaseBusiness className="size-4 stroke-primary" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">
+                  {activeWorkspace?.name}
+                </span>
+                <span className="truncate text-xs">
+                  {activeWorkspace?.user.name}
+                </span>
+              </div>
+              <ChevronsUpDown className="ml-auto" />
+            </SidebarMenuButton>
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"

@@ -1,7 +1,7 @@
 "use client"
 
 import { useSession } from "@/features/auth/hooks/use-session"
-import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/useCreateWorkspaceModal"
+import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
 import { Plus, SquareKanban } from "lucide-react"
 
 import { Button } from "@/components/ui/button"

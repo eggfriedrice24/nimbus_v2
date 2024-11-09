@@ -37,15 +37,14 @@ export const selectWorkspacesSchema = createSelectSchema(workspaces)
 export type NewWorkspace = typeof workspaces.$inferInsert
 export const insertWorkspaceSchema = createInsertSchema(workspaces, {
   name: (schema) => schema.name.min(1).max(500),
+}).omit({
+  id: true,
+  userId: true,
+  createdAt: true,
+  updatedAt: true,
+  imageUrl: true,
+  inviteCode: true,
 })
-  .required({
-    userId: true,
-  })
-  .omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-  })
 
 // Patch
 export const patchWorkspaceSchema = insertWorkspaceSchema.partial()

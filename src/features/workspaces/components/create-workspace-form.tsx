@@ -3,10 +3,12 @@
 import * as React from "react"
 
 import { useRouter } from "next/navigation"
+import { insertWorkspaceSchema } from "@/server/db/schema/workspaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
 import { BriefcaseBusiness, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
+import { type z } from "zod"
 
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
@@ -29,10 +31,8 @@ import { Label } from "@/components/ui/label"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 import { useCreateWorkspace } from "../hooks/use-create-workspace"
-import {
-  createWorkspaceSchema,
-  type CreateWorkspaceSchemaType,
-} from "../schemas/validations"
+
+type CreateWorkspaceSchemaType = z.infer<typeof insertWorkspaceSchema>
 
 export default function CreateWorkspaceForm({
   open,
@@ -100,7 +100,7 @@ export function CreateWorkspaceCard() {
   const router = useRouter()
 
   const form = useForm<CreateWorkspaceSchemaType>({
-    resolver: zodResolver(createWorkspaceSchema),
+    resolver: zodResolver(insertWorkspaceSchema),
     defaultValues: {
       name: "",
     },

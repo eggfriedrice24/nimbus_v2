@@ -37,7 +37,7 @@ export default async function GeneralSettings() {
               <BriefcaseBusiness className="size-8 text-white" />
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-8">
             <CreateWorkspaceCard />
           </CardContent>
         </Card>
