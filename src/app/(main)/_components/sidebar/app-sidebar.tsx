@@ -35,10 +35,17 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <div className="grid size-9 place-items-center rounded-full border bg-primary">
+          <div className="grid size-10 place-items-center rounded-full border bg-primary">
             <SquareKanban className="stroke-black" />
           </div>
-          <span className="font-bold">Nimbus</span>
+
+          <div className="flex flex-col gap-0">
+            <h1 className="font-bold">Nimbus</h1>
+
+            <span className="text-[10px] text-muted-foreground">
+              Staying above the clouds of productivity.
+            </span>
+          </div>
         </div>
       </SidebarHeader>
 
@@ -70,7 +77,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="font-bold">Platform</SidebarGroupLabel>
           <SidebarMenu>
-            <NavMain items={data.navMain} searchResults={data.searchResults} />
+            <NavMain items={data.navMain} />
           </SidebarMenu>
         </SidebarGroup>
 

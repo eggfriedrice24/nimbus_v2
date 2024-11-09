@@ -76,7 +76,7 @@ const config: Config = {
             transform: "scale(1)",
           },
           "50%": {
-            transform: "scale(0.95)",
+            transform: "scale(0.99)",
           },
           "100%": {
             transform: "scale(1)",

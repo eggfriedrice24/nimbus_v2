@@ -19,14 +19,11 @@ import {
 } from "@/components/ui/sidebar"
 
 import { type NavItem } from "./sidebar-data"
-import { SidebarSearch } from "./sidebar-search"
 
 export function NavMain({
   items,
-  searchResults,
 }: {
   items: NavItem[]
-  searchResults: React.ComponentProps<typeof SidebarSearch>["results"]
 } & React.ComponentProps<"ul">) {
   const pathname = usePathname()
 
@@ -45,10 +42,6 @@ export function NavMain({
 
   return (
     <>
-      <SidebarMenuItem>
-        <SidebarSearch results={searchResults} />
-      </SidebarMenuItem>
-
       {items.map((item) =>
         item.items?.length ? (
           <Collapsible
