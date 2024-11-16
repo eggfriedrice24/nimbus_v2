@@ -2,15 +2,9 @@ import * as React from "react"
 
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { BriefcaseBusiness, ChevronLeft } from "lucide-react"
+import { ChevronLeft } from "lucide-react"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { getServerSession } from "@/features/auth/lib/queries"
 import { DeleteWorkspaceAlert } from "@/features/workspaces/components/delete-workspace-alert"
 import ResetInviteCard from "@/features/workspaces/components/reset-invite-code-card"
@@ -34,31 +28,18 @@ export default async function GeneralSettings({
 
   return (
     <div className="container mx-auto max-w-2xl">
-      <Link
-        href={`/workspaces/${params.workspaceId}`}
-        className="mb-4 flex items-center text-primary"
-      >
-        <ChevronLeft className="mr-2 size-4" />
-        Back to Workspace
-      </Link>
-      <h1 className="mb-8 text-3xl font-bold">Workspace Settings</h1>
+      <div className="mb-4 flex items-center justify-between">
+        <Button asChild variant="secondary">
+          <Link href={`/workspaces/${params.workspaceId}`}>
+            <ChevronLeft className="mr-2 size-4" />
+            Back to Workspace
+          </Link>
+        </Button>
+
+        <h1 className="text-3xl font-bold">Workspace Settings</h1>
+      </div>
       <div className="space-y-4">
-        <Card className="border border-border bg-card/50">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl">Update Workspace</CardTitle>
-                <CardDescription>
-                  Modify your workspace details below.
-                </CardDescription>
-              </div>
-              <BriefcaseBusiness className="size-8 text-primary" />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <UpdateWorkspaceForm initialValues={{ ...workspace }} />
-          </CardContent>
-        </Card>
+        <UpdateWorkspaceForm initialValues={{ ...workspace }} />
 
         <ResetInviteCard initialValues={{ inviteCode: workspace.inviteCode }} />
 

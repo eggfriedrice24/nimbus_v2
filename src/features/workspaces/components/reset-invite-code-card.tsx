@@ -31,7 +31,10 @@ export default function ResetInviteCard({
 
   const { mutate, isPending } = useResetInviteCode()
 
-  const inviteLink = `${window.location.origin}/workspaces/${workspaceId}/join/${initialValues.inviteCode}`
+  const inviteLink =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/workspaces/${workspaceId}/join/${initialValues.inviteCode}`
+      : ""
 
   const { isCopied, copyToClipboard } = useCopy()
 
@@ -40,7 +43,7 @@ export default function ResetInviteCard({
   }
 
   return (
-    <Card className="w-full">
+    <Card className="w-full border-none bg-secondary/50">
       <CardHeader>
         <CardTitle>Invite Members</CardTitle>
         <CardDescription>

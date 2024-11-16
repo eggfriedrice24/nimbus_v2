@@ -4,11 +4,18 @@ import * as React from "react"
 
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2 } from "lucide-react"
+import { BriefcaseBusiness, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { type z } from "zod"
 
 import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Form,
   FormControl,
@@ -58,46 +65,61 @@ export function UpdateWorkspaceForm({
   }
 
   return (
-    <Form {...form}>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="name">Workspace Name</Label>
+    <Card className="border-none bg-secondary/50">
+      <div className="flex items-center justify-between pr-6">
+        <CardHeader>
+          <CardTitle>Update Workspace</CardTitle>
+          <CardDescription>
+            Modify your workspace details below.
+          </CardDescription>
+        </CardHeader>
 
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    {...field}
-                    id="name"
-                    type="text"
-                    placeholder="Enter workspace name..."
-                    disabled={isPending}
-                  />
-                </FormControl>
+        <BriefcaseBusiness className="size-8 text-primary" />
+      </div>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+      <CardContent>
+        <Form {...form}>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="name">Workspace Name</Label>
 
-        <Button className="w-full" type="submit" disabled={isPending}>
-          {isPending ? (
-            <>
-              <Loader2 className="mr-2 size-4 animate-spin" />
-              Updating...
-            </>
-          ) : (
-            "Update Workspace"
-          )}
-        </Button>
-      </form>
-    </Form>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        id="name"
+                        type="text"
+                        placeholder="Enter workspace name..."
+                        disabled={isPending}
+                      />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Button className="w-full" type="submit" disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 size-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Update Workspace"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }

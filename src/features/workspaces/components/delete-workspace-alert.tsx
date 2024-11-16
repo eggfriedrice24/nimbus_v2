@@ -39,9 +39,9 @@ export function DeleteWorkspaceAlert() {
   }
 
   return (
-    <Card className="border border-border bg-card/50">
+    <Card className="border-none bg-secondary/50">
       <CardHeader>
-        <CardTitle className="text-2xl text-destructive">Danger Zone</CardTitle>
+        <CardTitle className="text-destructive">Danger Zone</CardTitle>
       </CardHeader>
       <CardContent>
         <Alert variant="destructive">
