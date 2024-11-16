@@ -30,7 +30,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useIsMobile } from "@/hooks/use-mobile"
 
-import { useCreateWorkspace } from "../hooks/use-create-workspace"
+import { useCreateWorkspace } from "../services/use-create-workspace"
 
 type CreateWorkspaceSchemaType = z.infer<typeof insertWorkspaceSchema>
 

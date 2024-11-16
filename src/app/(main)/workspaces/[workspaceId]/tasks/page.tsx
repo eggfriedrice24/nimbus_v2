@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { redirect } from "next/navigation"
-import { getServerSession } from "@/features/auth/queries"
+import { getServerSession } from "@/features/auth/lib/queries"
 
 export default async function Tasks() {
   const session = await getServerSession()

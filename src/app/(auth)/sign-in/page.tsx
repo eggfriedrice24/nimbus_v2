@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { redirect } from "next/navigation"
 import { LoginCard } from "@/features/auth/components/sign-in-card"
-import { getServerSession } from "@/features/auth/queries"
+import { getServerSession } from "@/features/auth/lib/queries"
 
 export const dynamic = "force-dynamic"
 

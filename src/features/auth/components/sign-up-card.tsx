@@ -26,8 +26,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { DottedSeparator } from "@/components/ui/separator"
 
-import { useRegister } from "../hooks/use-register"
-import { registerSchema, type RegisterSchemaType } from "../schemas/validations"
+import { registerSchema, type RegisterSchemaType } from "../lib/validations"
+import { useRegister } from "../services/use-register"
 
 export const description =
   "A sign up form with first name, last name, email and password inside a card. There's an option to sign up with GitHub and a link to login if you already have an account"

@@ -1,4 +1,4 @@
-import { useLogout } from "@/features/auth/hooks/use-logout"
+import { useLogout } from "@/features/auth/services/use-logout"
 import { BadgeCheck, ChevronsUpDown, CreditCard, LogOut } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"

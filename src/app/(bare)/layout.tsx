@@ -2,8 +2,8 @@
 
 import * as React from "react"
 
-import { useSession } from "@/features/auth/hooks/use-session"
-import { HomeIcon, SquareKanban } from "lucide-react"
+import { useSession } from "@/features/auth/services/use-session"
+import { SquareKanban } from "lucide-react"
 
 import { Skeleton } from "@/components/ui/skeleton"
 

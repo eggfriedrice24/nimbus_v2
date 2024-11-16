@@ -5,7 +5,7 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 import CreateWorkspaceForm from "@/features/workspaces/components/create-workspace-form"
 import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
-import { useGetWorkspaces } from "@/features/workspaces/hooks/use-get-workspaces"
+import { useGetWorkspaces } from "@/features/workspaces/services/use-get-workspaces"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { BriefcaseBusiness, ChevronsUpDown, CircuitBoard } from "lucide-react"
 

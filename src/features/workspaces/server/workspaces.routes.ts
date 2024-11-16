@@ -1,4 +1,4 @@
-import { getMember } from "@/features/members/utils"
+import { getMember } from "@/features/members/lib/queries"
 import { db } from "@/server/db"
 import { workspaces } from "@/server/db/schema"
 import { MemberRole, members } from "@/server/db/schema/members"

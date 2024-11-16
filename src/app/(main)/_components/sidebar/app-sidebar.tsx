@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "@/features/auth/hooks/use-session"
+import { useSession } from "@/features/auth/services/use-session"
 import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
 import { Plus, SquareKanban } from "lucide-react"
 
@@ -18,6 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
+  useSidebar,
 } from "@/components/ui/sidebar"
 
 import { NavProjects } from ".//nav-projects"
@@ -31,6 +32,8 @@ export function AppSidebar() {
 
   const { open } = useCreateWorkspaceModal()
 
+  const { state } = useSidebar()
+
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader>
@@ -39,13 +42,15 @@ export function AppSidebar() {
             <SquareKanban className="stroke-black" />
           </div>
 
-          <div className="flex flex-col gap-0">
-            <h1 className="font-bold">Nimbus</h1>
+          {state === "expanded" && (
+            <div className="flex flex-col gap-0">
+              <h1 className="font-bold">Nimbus</h1>
 
-            <span className="text-[10px] text-muted-foreground">
-              Staying above the clouds of productivity.
-            </span>
-          </div>
+              <span className="text-[10px] text-muted-foreground">
+                Staying above the clouds of productivity.
+              </span>
+            </div>
+          )}
         </div>
       </SidebarHeader>
 

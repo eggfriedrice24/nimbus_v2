@@ -8,8 +8,8 @@ import { deleteCookie, setCookie } from "hono/cookie"
 import { sign } from "hono/jwt"
 import * as HttpStatusCodes from "stoker/http-status-codes"
 
-import { getUserByEmail } from "../queries"
-import { loginSchema, registerSchema } from "../schemas/validations"
+import { getUserByEmail } from "../lib/queries"
+import { loginSchema, registerSchema } from "../lib/validations"
 
 const app = new Hono()
   .get("/current", sessionMiddleware, async (c) => {

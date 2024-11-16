@@ -27,8 +27,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { DottedSeparator } from "@/components/ui/separator"
 
-import { useLogin } from "../hooks/use-login"
-import { loginSchema } from "../schemas/validations"
+import { loginSchema } from "../lib/validations"
+import { useLogin } from "../services/use-login"
 
 export const description =
   "A login form with email and password. There's an option to login with Google and a link to sign up if you don't have an account."

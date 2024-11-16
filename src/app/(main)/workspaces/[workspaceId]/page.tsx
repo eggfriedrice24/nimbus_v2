@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
-import { getServerSession } from "@/features/auth/queries"
+import { getServerSession } from "@/features/auth/lib/queries"
 
 import { SidebarTrigger } from "@/components/ui/sidebar"
 

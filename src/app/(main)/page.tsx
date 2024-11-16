@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
-import { getServerSession } from "@/features/auth/queries"
-import { getWorkspaces } from "@/features/workspaces/queries"
+import { getServerSession } from "@/features/auth/lib/queries"
+import { getWorkspaces } from "@/features/workspaces/lib/queries"
 
 export const dynamic = "force-dynamic"
 
