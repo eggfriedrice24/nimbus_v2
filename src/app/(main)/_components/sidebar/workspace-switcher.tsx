@@ -4,9 +4,8 @@ import * as React from "react"
 
 import { useRouter } from "next/navigation"
 import CreateWorkspaceForm from "@/features/workspaces/components/create-workspace-form"
-import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
-import { useGetWorkspaces } from "@/features/workspaces/services/use-get-workspaces"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
+import { useGetWorkspaces } from "@/features/workspaces/services/use-get-workspaces"
 import { BriefcaseBusiness, ChevronsUpDown, CircuitBoard } from "lucide-react"
 
 import {
@@ -23,8 +22,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 export function WorkspaceSwitcher() {
   const router = useRouter()
   const workspaceId = useWorkspaceId()
-
-  const { isOpen: open, setIsOpen: setOpen } = useCreateWorkspaceModal()
 
   const { data: workspaces, isLoading } = useGetWorkspaces()
 
@@ -88,7 +85,7 @@ export function WorkspaceSwitcher() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <CreateWorkspaceForm open={open} onOpenChange={setOpen} />
+      <CreateWorkspaceForm />
     </>
   )
 }

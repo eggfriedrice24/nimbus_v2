@@ -5,20 +5,11 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 import { insertWorkspaceSchema } from "@/server/db/schema/workspaces"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog"
 import { BriefcaseBusiness, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { type z } from "zod"
 
 import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer"
 import {
   Form,
   FormControl,
@@ -28,75 +19,17 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useIsMobile } from "@/hooks/use-mobile"
+import ResponsiveModal from "@/components/responsive-modal"
 
+import { useCreateWorkspaceModal } from "../hooks/use-create-workspace-modal"
 import { useCreateWorkspace } from "../services/use-create-workspace"
 
 type CreateWorkspaceSchemaType = z.infer<typeof insertWorkspaceSchema>
 
-export default function CreateWorkspaceForm({
-  open,
-  onOpenChange,
-}: {
-  open: boolean
-  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
-}) {
-  const isMobile = useIsMobile()
+export default function CreateWorkspaceForm() {
+  const { isOpen, setIsOpen } = useCreateWorkspaceModal()
 
-  if (isMobile) {
-    return (
-      <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerContent>
-          <DrawerHeader className="text-left">
-            <div className="flex items-start justify-between">
-              <div>
-                <DrawerTitle className="text-3xl font-bold">
-                  Create Workspace
-                </DrawerTitle>
-                <DrawerDescription>
-                  Enter a name for your new workspace and start collaborating!
-                </DrawerDescription>
-              </div>
-
-              <BriefcaseBusiness className="size-16 text-white" />
-            </div>
-          </DrawerHeader>
-
-          <div className="p-4">
-            <CreateWorkspaceCard />
-          </div>
-        </DrawerContent>
-      </Drawer>
-    )
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <div className="flex items-start justify-between">
-            <div>
-              <DialogTitle className="text-3xl font-bold">
-                Create Workspace
-              </DialogTitle>
-
-              <DialogDescription className="text-sm text-muted-foreground">
-                Enter a name for your new workspace and start collaborating!
-              </DialogDescription>
-            </div>
-
-            <BriefcaseBusiness className="size-16 text-white" />
-          </div>
-        </DialogHeader>
-
-        <CreateWorkspaceCard />
-      </DialogContent>
-    </Dialog>
-  )
-}
-export function CreateWorkspaceCard() {
   const { mutate, isPending } = useCreateWorkspace()
-
   const router = useRouter()
 
   const form = useForm<CreateWorkspaceSchemaType>({
@@ -119,12 +52,18 @@ export function CreateWorkspaceCard() {
   }
 
   return (
-    <Form {...form}>
-      <form className="grid gap-8" onSubmit={form.handleSubmit(onSubmit)}>
-        <div>
+    <ResponsiveModal
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      title="Create Workspace"
+      description="Enter a name for your new workspace and start collaborating!"
+      icon={<BriefcaseBusiness className="size-14 text-white" />}
+      className="flex flex-col gap-7"
+    >
+      <Form {...form}>
+        <form className="grid gap-3" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
             <Label htmlFor="name">Workspace Name</Label>
-
             <FormField
               control={form.control}
               name="name"
@@ -139,25 +78,24 @@ export function CreateWorkspaceCard() {
                       disabled={isPending}
                     />
                   </FormControl>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-        </div>
 
-        <Button className="w-full" type="submit" disabled={isPending}>
-          {isPending ? (
-            <>
-              <Loader2 className="mr-2 size-4 animate-spin" />
-              Creating...
-            </>
-          ) : (
-            "Create Workspace"
-          )}
-        </Button>
-      </form>
-    </Form>
+          <Button className="w-full" type="submit" disabled={isPending}>
+            {isPending ? (
+              <>
+                <Loader2 className="mr-2 size-4 animate-spin" />
+                Creating...
+              </>
+            ) : (
+              "Create Workspace"
+            )}
+          </Button>
+        </form>
+      </Form>
+    </ResponsiveModal>
   )
 }

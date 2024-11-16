@@ -72,6 +72,7 @@ export function DeleteWorkspaceAlert() {
                 variant="destructive"
                 onClick={handleDelete}
                 type="button"
+                disabled={isPending}
               >
                 {isPending ? (
                   <>

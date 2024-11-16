@@ -2,7 +2,7 @@
 
 import { useSession } from "@/features/auth/services/use-session"
 import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
-import { Plus, SquareKanban } from "lucide-react"
+import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { DottedSeparator } from "@/components/ui/separator"
@@ -13,12 +13,10 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
-  useSidebar,
 } from "@/components/ui/sidebar"
 
 import { NavProjects } from ".//nav-projects"
@@ -32,30 +30,8 @@ export function AppSidebar() {
 
   const { open } = useCreateWorkspaceModal()
 
-  const { state } = useSidebar()
-
   return (
     <Sidebar collapsible="icon" variant="inset">
-      <SidebarHeader>
-        <div className="flex items-center gap-2">
-          <div className="grid size-10 place-items-center rounded-full border bg-primary">
-            <SquareKanban className="stroke-black" />
-          </div>
-
-          {state === "expanded" && (
-            <div className="flex flex-col gap-0">
-              <h1 className="font-bold">Nimbus</h1>
-
-              <span className="text-[10px] text-muted-foreground">
-                Staying above the clouds of productivity.
-              </span>
-            </div>
-          )}
-        </div>
-      </SidebarHeader>
-
-      <DottedSeparator className="my-3" />
-
       <SidebarContent>
         <SidebarGroup>
           <div className="flex items-center justify-between">
@@ -86,7 +62,7 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
 
-        <DottedSeparator />
+        <DottedSeparator className="px-3" />
 
         <SidebarGroup>
           <SidebarGroupLabel className="font-bold">Projects</SidebarGroupLabel>
@@ -112,7 +88,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <DottedSeparator className="mt-2" />
+      <DottedSeparator className="mt-2 px-3" />
 
       <SidebarFooter>
         <SidebarMenu>

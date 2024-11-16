@@ -1,6 +1,6 @@
-import React from "react"
+"use client"
 
-import { type LucideIcon } from "lucide-react"
+import React from "react"
 
 import {
   Dialog,
@@ -23,7 +23,7 @@ interface ReusableModalProps {
   onOpenChange: (open: boolean) => void
   title: string
   description?: string
-  icon?: LucideIcon
+  icon?: React.ReactNode
   children: React.ReactNode
   className?: string
 }
@@ -67,6 +67,7 @@ export default function ResponsiveModal({
           <DrawerHeader className="text-left">
             <HeaderContent />
           </DrawerHeader>
+
           <div className="p-4">{children}</div>
         </DrawerContent>
       </Drawer>
