@@ -17,6 +17,8 @@ import {
 } from "@/server/db/schema/workspaces"
 import { sessionMiddleware } from "@/server/session-middleware"
 
+import { getWorkspace } from "../lib/queries"
+
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
     const user = c.get("user")
@@ -230,6 +232,42 @@ const app = new Hono()
       }
 
       return c.json(workspace, HttpStatusCodes.OK)
+    }
+  )
+  .post(
+    "/:workspaceId/join",
+    sessionMiddleware,
+    zValidator("param", z.object({ workspaceId: z.string() })),
+
+    zValidator("json", z.object({ code: z.string() })),
+    async (c) => {
+      const { workspaceId } = c.req.valid("param")
+
+      const { code } = c.req.valid("json")
+
+      const user = c.get("user")
+
+      const member = await getMember(workspaceId, user.id ?? "")
+
+      if (member) {
+        return c.json(
+          { error: "Already a member" },
+          HttpStatusCodes.BAD_REQUEST
+        )
+      }
+
+      const workspace = await getWorkspace(workspaceId)
+
+      if (workspace?.inviteCode !== code) {
+        return c.json({ error: "Invalid code." }, HttpStatusCodes.BAD_REQUEST)
+      }
+
+      await db
+        .insert(members)
+        .values({ workspaceId, userId: user.id ?? "", role: MemberRole.MEMBER })
+        .returning()
+
+      return c.json({ workspace })
     }
   )
 
