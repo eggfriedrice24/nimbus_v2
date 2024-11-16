@@ -15,15 +15,21 @@ export async function getWorkspaces() {
       user: true,
       members: true,
     },
-    where: (workspaces, { exists, eq, and }) =>
-      and(
+    where: (workspaces, { exists, eq, or, and }) =>
+      or(
+        eq(workspaces.userId, session.id),
+
         exists(
           db
             .select()
             .from(members)
-            .where(eq(members.workspaceId, workspaces.id))
-        ),
-        eq(workspaces.userId, session?.id ?? "")
+            .where(
+              and(
+                eq(members.workspaceId, workspaces.id),
+                eq(members.userId, session.id)
+              )
+            )
+        )
       ),
   })
 
@@ -52,4 +58,16 @@ export async function getWorkspace(workspaceId: string) {
   })
 
   return workspace
+}
+
+export async function getWorkspaceInfo(workspaceId: string) {
+  const workspace = await db.query.workspaces.findFirst({
+    where: (workspaces, { eq }) => eq(workspaces.id, workspaceId),
+  })
+
+  if (!workspace) {
+    return null
+  }
+
+  return { name: workspace.name }
 }

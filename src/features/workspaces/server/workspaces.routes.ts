@@ -17,8 +17,6 @@ import {
 } from "@/server/db/schema/workspaces"
 import { sessionMiddleware } from "@/server/session-middleware"
 
-import { getWorkspace } from "../lib/queries"
-
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
     const user = c.get("user")
@@ -28,15 +26,21 @@ const app = new Hono()
         user: true,
         members: true,
       },
-      where: (workspaces, { exists, eq, and }) =>
-        and(
+      where: (workspaces, { exists, eq, or, and }) =>
+        or(
+          eq(workspaces.userId, user.id ?? ""),
+
           exists(
             db
               .select()
               .from(members)
-              .where(eq(members.workspaceId, workspaces.id))
-          ),
-          eq(workspaces.userId, user.id ?? "")
+              .where(
+                and(
+                  eq(members.workspaceId, workspaces.id),
+                  eq(members.userId, user.id ?? "")
+                )
+              )
+          )
         ),
     })
 
@@ -256,9 +260,18 @@ const app = new Hono()
         )
       }
 
-      const workspace = await getWorkspace(workspaceId)
+      const workspace = await db.query.workspaces.findFirst({
+        where: eq(workspaces.id, workspaceId),
+      })
 
-      if (workspace?.inviteCode !== code) {
+      if (!workspace) {
+        return c.json(
+          { error: "Workspace does not exist." },
+          HttpStatusCodes.NOT_FOUND
+        )
+      }
+
+      if (workspace.inviteCode !== code) {
         return c.json({ error: "Invalid code." }, HttpStatusCodes.BAD_REQUEST)
       }
 
