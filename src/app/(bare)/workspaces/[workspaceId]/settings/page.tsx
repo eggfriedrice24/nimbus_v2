@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card"
 import { getServerSession } from "@/features/auth/lib/queries"
 import { DeleteWorkspaceAlert } from "@/features/workspaces/components/delete-workspace-alert"
+import ResetInviteCard from "@/features/workspaces/components/reset-invite-code-card"
 import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form"
 import { getWorkspace } from "@/features/workspaces/lib/queries"
 
@@ -59,20 +60,7 @@ export default async function GeneralSettings({
           </CardContent>
         </Card>
 
-        <Card className="border border-border bg-card/50">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-2xl">Update Workspace</CardTitle>
-                <CardDescription>
-                  Modify your workspace details below.
-                </CardDescription>
-              </div>
-              <BriefcaseBusiness className="size-8 text-primary" />
-            </div>
-          </CardHeader>
-          <CardContent>ssss</CardContent>
-        </Card>
+        <ResetInviteCard initialValues={{ inviteCode: workspace.inviteCode }} />
 
         <DeleteWorkspaceAlert />
       </div>
