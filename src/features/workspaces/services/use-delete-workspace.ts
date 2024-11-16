@@ -4,8 +4,7 @@ import type { InferRequestType, InferResponseType } from "hono"
 import { toast } from "sonner"
 
 type ResponseType = InferResponseType<
-  (typeof client.api.workspaces)[":workspaceId"]["$delete"],
-  200
+  (typeof client.api.workspaces)[":workspaceId"]["$delete"]
 >
 type RequestType = InferRequestType<
   (typeof client.api.workspaces)[":workspaceId"]["$delete"]
@@ -26,9 +25,12 @@ export function useDeleteWorkspace() {
 
       return await response.json()
     },
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
       toast.success("Workspace Deleted Successfully! 🎉")
       void queryClient.invalidateQueries({ queryKey: ["workspaces"] })
+      void queryClient.invalidateQueries({
+        queryKey: ["workspaces", data?.id],
+      })
     },
     onError: () => {
       toast.error("Failed to Delete Workspace! ❌")

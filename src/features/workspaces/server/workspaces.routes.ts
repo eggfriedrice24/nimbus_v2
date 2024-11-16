@@ -140,23 +140,55 @@ const app = new Hono()
   .delete(
     "/:workspaceId",
     zValidator("param", z.object({ workspaceId: z.string() })),
+    sessionMiddleware,
     async (c) => {
       const { workspaceId } = c.req.valid("param")
+
+      const user = c.get("user")
+
+      const member = await getMember(workspaceId, user.id ?? "")
+
+      if (!member || member.role !== MemberRole.ADMIN) {
+        return c.json(
+          {
+            success: false,
+            data: null,
+            error: {
+              message: "You do not have permission to perform this action.",
+            },
+          },
+          HttpStatusCodes.FORBIDDEN
+        )
+      }
+
+      // TODO: delete members, projects and tasks
+
       const result = await db
         .delete(workspaces)
         .where(eq(workspaces.id, workspaceId))
 
-      // @ts-expect-error sadsa
+      // @ts-expect-error sada
       if (result.rowsAffected === 0) {
         return c.json(
           {
-            message: HttpStatusPhrases.NOT_FOUND,
+            success: false,
+            data: null,
+            error: {
+              message: "Not Found.",
+            },
           },
           HttpStatusCodes.NOT_FOUND
         )
       }
 
-      return c.body(null, HttpStatusCodes.NO_CONTENT)
+      return c.json(
+        {
+          success: true,
+          data: { id: workspaceId },
+          error: null,
+        },
+        HttpStatusCodes.NO_CONTENT
+      )
     }
   )
 
