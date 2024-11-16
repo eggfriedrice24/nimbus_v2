@@ -3,17 +3,11 @@ import * as React from "react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { getServerSession } from "@/features/auth/lib/queries"
+import { DeleteWorkspaceAlert } from "@/features/workspaces/components/delete-workspace-alert"
 import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form"
 import { getWorkspace } from "@/features/workspaces/lib/queries"
-import {
-  AlertCircle,
-  BriefcaseBusiness,
-  ChevronLeft,
-  Trash,
-} from "lucide-react"
+import { BriefcaseBusiness, ChevronLeft } from "lucide-react"
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -21,15 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { DottedSeparator } from "@/components/ui/separator"
 
 export default async function GeneralSettings({
@@ -77,44 +62,7 @@ export default async function GeneralSettings({
 
         <DottedSeparator />
 
-        <Card className="border border-border bg-card/50">
-          <CardHeader>
-            <CardTitle className="text-2xl text-destructive">
-              Danger Zone
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Alert variant="destructive">
-              <AlertCircle className="size-4" />
-              <AlertTitle>Warning</AlertTitle>
-              <AlertDescription>
-                Deleting this workspace is permanent and cannot be undone. All
-                data related to it will be permanently removed from our servers.
-              </AlertDescription>
-            </Alert>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="destructive" className="mt-4 w-full">
-                  Delete Workspace <Trash className="ml-2 size-4" />
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Are you absolutely sure?</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    your workspace and remove all associated data from our
-                    servers.
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button variant="secondary">Cancel</Button>
-                  <Button variant="destructive">Yes, delete workspace</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </CardContent>
-        </Card>
+        <DeleteWorkspaceAlert />
       </div>
     </div>
   )

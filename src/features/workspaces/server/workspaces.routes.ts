@@ -187,7 +187,7 @@ const app = new Hono()
           data: { id: workspaceId },
           error: null,
         },
-        HttpStatusCodes.NO_CONTENT
+        HttpStatusCodes.OK
       )
     }
   )

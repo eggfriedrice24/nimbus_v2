@@ -15,7 +15,7 @@ export const members = pgTable("members", {
     .references(() => users.id),
   workspaceId: varchar("workspace_id", { length: 255 })
     .notNull()
-    .references(() => workspaces.id),
+    .references(() => workspaces.id, { onDelete: "cascade" }),
   role: varchar("role", {
     length: 30,
     enum: ["ADMIN", "MEMBER"],
