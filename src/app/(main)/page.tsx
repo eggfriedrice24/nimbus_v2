@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation"
+
 import { getServerSession } from "@/features/auth/lib/queries"
 import { getWorkspaces } from "@/features/workspaces/lib/queries"
 

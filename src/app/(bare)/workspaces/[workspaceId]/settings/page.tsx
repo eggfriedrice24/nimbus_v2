@@ -2,10 +2,6 @@ import * as React from "react"
 
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { getServerSession } from "@/features/auth/lib/queries"
-import { DeleteWorkspaceAlert } from "@/features/workspaces/components/delete-workspace-alert"
-import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form"
-import { getWorkspace } from "@/features/workspaces/lib/queries"
 import { BriefcaseBusiness, ChevronLeft } from "lucide-react"
 
 import {
@@ -16,6 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { DottedSeparator } from "@/components/ui/separator"
+import { getServerSession } from "@/features/auth/lib/queries"
+import { DeleteWorkspaceAlert } from "@/features/workspaces/components/delete-workspace-alert"
+import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form"
+import { getWorkspace } from "@/features/workspaces/lib/queries"
 
 export default async function GeneralSettings({
   params,

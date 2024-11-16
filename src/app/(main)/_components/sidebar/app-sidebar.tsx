@@ -34,7 +34,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" variant="inset">
       <SidebarContent>
         <SidebarGroup>
-          <div className="flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between">
             <SidebarGroupLabel className="font-bold">
               Workspaces
             </SidebarGroupLabel>

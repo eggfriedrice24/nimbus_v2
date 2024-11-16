@@ -2,10 +2,10 @@
 
 import * as React from "react"
 
-import { useSession } from "@/features/auth/services/use-session"
 import { SquareKanban } from "lucide-react"
 
 import { Skeleton } from "@/components/ui/skeleton"
+import { useSession } from "@/features/auth/services/use-session"
 
 interface OnboardingLayoutProps {
   children: React.ReactNode

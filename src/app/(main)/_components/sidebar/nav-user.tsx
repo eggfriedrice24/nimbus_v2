@@ -1,6 +1,6 @@
-import { useLogout } from "@/features/auth/services/use-logout"
 import { BadgeCheck, ChevronsUpDown, CreditCard, LogOut } from "lucide-react"
 
+import { ThemeSwitcher } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton } from "@/components/ui/sidebar"
-import { ThemeSwitcher } from "@/components/theme-toggle"
+import { useLogout } from "@/features/auth/services/use-logout"
 
 export function NavUser({
   user,

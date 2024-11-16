@@ -1,7 +1,8 @@
 import * as React from "react"
 
-import { AuthButton } from "@/features/auth/components/auth-btn"
 import { SquareKanban } from "lucide-react"
+
+import { AuthButton } from "@/features/auth/components/auth-btn"
 
 interface AuthLayoutProps {
   children: React.ReactNode

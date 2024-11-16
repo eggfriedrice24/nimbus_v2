@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { AlertCircle, Trash } from "lucide-react"
 
+import { TailSpin } from "@/components/tailspin"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { TailSpin } from "@/components/tailspin"
 
 import { useWorkspaceId } from "../hooks/use-workspace-id"
 import { useDeleteWorkspace } from "../services/use-delete-workspace"

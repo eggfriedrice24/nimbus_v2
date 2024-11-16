@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { useRouter } from "next/navigation"
-import CreateWorkspaceForm from "@/features/workspaces/components/create-workspace-form"
+import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { useGetWorkspaces } from "@/features/workspaces/services/use-get-workspaces"
 import { BriefcaseBusiness, ChevronsUpDown, CircuitBoard } from "lucide-react"
@@ -85,7 +85,7 @@ export function WorkspaceSwitcher() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <CreateWorkspaceForm />
+      <CreateWorkspaceModal />
     </>
   )
 }

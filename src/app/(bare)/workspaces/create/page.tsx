@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { redirect } from "next/navigation"
 import { getServerSession } from "@/features/auth/lib/queries"
-import { CreateWorkspaceCard } from "@/features/workspaces/components/create-workspace-form"
+import { CreateWorkspaceForm } from "@/features/workspaces/components/create-workspace-form"
 import { BriefcaseBusiness } from "lucide-react"
 
 import {
@@ -35,7 +35,7 @@ export default async function CreateWorkspacePage() {
           </div>
         </CardHeader>
         <CardContent>
-          <CreateWorkspaceCard />
+          <CreateWorkspaceForm />
         </CardContent>
       </Card>
     </div>

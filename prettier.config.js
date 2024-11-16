@@ -6,28 +6,16 @@ const config = {
   tabWidth: 2,
   trailingComma: "es5",
   importOrder: [
-    "^(react/(.*)$)|^(react$)",
+    "^(react/(.*)$)|^(react$)", // React first
     "",
-    "^(next/(.*)$)|^(next$)",
-    "<THIRD_PARTY_MODULES>",
+    "^(next/(.*)$)|^(next$)", // Next.js imports
+    "<THIRD_PARTY_MODULES>",   // Other external libraries
     "",
-    "^@/app/(.*)$",
-    "^@/config/(.*)$",
-    "^@/lib/(.*)$",
+    "^@/(.*)$",                // Internal aliases (e.g., @/components)
     "",
-    "^@/components/ui/(.*)$",
-    "^@/components/(.*)$",
-    "^@/hooks/(.*)$",
-    "",
-    "^types$",
-    "^@/types/(.*)$",
-    "",
-    "^[./]",
-    "",
-    "^@/styles/(.*)$",
-
+    "^[./]",                   // Relative imports
   ],
-  importOrderSeparation: false,
+  importOrderSeparation: true, // Enforce blank lines between groups
   importOrderSortSpecifiers: true,
   importOrderBuiltinModulesToTop: true,
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],

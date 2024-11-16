@@ -28,7 +28,7 @@ interface ReusableModalProps {
   className?: string
 }
 
-export default function ResponsiveModal({
+export function ResponsiveModal({
   open,
   onOpenChange,
   title,

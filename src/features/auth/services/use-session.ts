@@ -1,5 +1,6 @@
-import { client } from "@/server/rpc"
 import { useQuery } from "@tanstack/react-query"
+
+import { client } from "@/server/rpc"
 
 export function useSession() {
   const mutation = useQuery({

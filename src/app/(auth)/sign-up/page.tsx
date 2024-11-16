@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import { redirect } from "next/navigation"
+
 import { SignUpForm } from "@/features/auth/components/sign-up-card"
 import { getServerSession } from "@/features/auth/lib/queries"
 

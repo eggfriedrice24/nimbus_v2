@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { ChevronRight } from "lucide-react"
 
 import {
@@ -17,6 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 
 import { type NavItem } from "./sidebar-data"
 

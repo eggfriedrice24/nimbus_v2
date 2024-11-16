@@ -1,8 +1,9 @@
-import authRoutes from "@/features/auth/server/auth.routes"
-import workspaceRoutes from "@/features/workspaces/server/workspaces.routes"
 import { Hono } from "hono"
 import { handle } from "hono/vercel"
 import { notFound, onError } from "stoker/middlewares"
+
+import authRoutes from "@/features/auth/server/auth.routes"
+import workspaceRoutes from "@/features/workspaces/server/workspaces.routes"
 
 const app = new Hono().basePath("/api")
 

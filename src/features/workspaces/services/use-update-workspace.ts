@@ -1,7 +1,8 @@
-import { client } from "@/server/rpc"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { InferRequestType, InferResponseType } from "hono"
 import { toast } from "sonner"
+
+import { client } from "@/server/rpc"
 
 type ResponseType = InferResponseType<
   (typeof client.api.workspaces)[":workspaceId"]["$patch"],

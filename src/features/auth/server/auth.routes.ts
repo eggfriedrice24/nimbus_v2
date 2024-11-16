@@ -1,12 +1,13 @@
-import { db } from "@/server/db"
-import { users } from "@/server/db/schema/user"
-import { sessionMiddleware } from "@/server/session-middleware"
 import { zValidator } from "@hono/zod-validator"
 import bcrypt from "bcryptjs"
 import { Hono } from "hono"
 import { deleteCookie, setCookie } from "hono/cookie"
 import { sign } from "hono/jwt"
 import * as HttpStatusCodes from "stoker/http-status-codes"
+
+import { db } from "@/server/db"
+import { users } from "@/server/db/schema/user"
+import { sessionMiddleware } from "@/server/session-middleware"
 
 import { getUserByEmail } from "../lib/queries"
 import { loginSchema, registerSchema } from "../lib/validations"

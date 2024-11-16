@@ -5,8 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Square as FcGoogle } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { cn } from "@/lib/utils"
-
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
@@ -25,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { DottedSeparator } from "@/components/ui/separator"
+import { cn } from "@/lib/utils"
 
 import { registerSchema, type RegisterSchemaType } from "../lib/validations"
 import { useRegister } from "../services/use-register"

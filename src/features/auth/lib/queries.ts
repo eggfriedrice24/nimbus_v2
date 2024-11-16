@@ -1,9 +1,10 @@
 import { cookies } from "next/headers"
+import { eq } from "drizzle-orm"
+import { decode } from "hono/jwt"
+
 import { db } from "@/server/db"
 import { users } from "@/server/db/schema"
 import { type User } from "@/server/db/schema/user"
-import { eq } from "drizzle-orm"
-import { decode } from "hono/jwt"
 
 export const getUserByEmail = async (email: string) => {
   try {

@@ -1,6 +1,7 @@
-import { client } from "@/server/rpc"
 import { useQuery } from "@tanstack/react-query"
 import { type InferResponseType } from "hono"
+
+import { client } from "@/server/rpc"
 
 type ResponseType = InferResponseType<typeof client.api.workspaces.$get>
 
