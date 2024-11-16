@@ -1,8 +1,6 @@
 import * as React from "react"
 
 import { redirect } from "next/navigation"
-import { getServerSession } from "@/features/auth/lib/queries"
-import { CreateWorkspaceForm } from "@/features/workspaces/components/create-workspace-form"
 import { BriefcaseBusiness } from "lucide-react"
 
 import {
@@ -12,6 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { getServerSession } from "@/features/auth/lib/queries"
+import { CreateWorkspaceForm } from "@/features/workspaces/components/create-workspace-form"
 
 export default async function CreateWorkspacePage() {
   const session = await getServerSession()

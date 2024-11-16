@@ -3,7 +3,6 @@
 import * as React from "react"
 
 import { useRouter } from "next/navigation"
-import { insertWorkspaceSchema } from "@/server/db/schema/workspaces"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -19,6 +18,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { insertWorkspaceSchema } from "@/server/db/schema/workspaces"
 
 import { useCreateWorkspace } from "../services/use-create-workspace"
 

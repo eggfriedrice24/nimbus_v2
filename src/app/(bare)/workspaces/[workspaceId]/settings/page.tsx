@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { DottedSeparator } from "@/components/ui/separator"
 import { getServerSession } from "@/features/auth/lib/queries"
 import { DeleteWorkspaceAlert } from "@/features/workspaces/components/delete-workspace-alert"
 import { UpdateWorkspaceForm } from "@/features/workspaces/components/update-workspace-form"
@@ -33,7 +32,7 @@ export default async function GeneralSettings({
   }
 
   return (
-    <div className="container mx-auto max-w-2xl py-8">
+    <div className="container mx-auto max-w-2xl">
       <Link
         href={`/workspaces/${params.workspaceId}`}
         className="mb-4 flex items-center text-primary"
@@ -42,7 +41,7 @@ export default async function GeneralSettings({
         Back to Workspace
       </Link>
       <h1 className="mb-8 text-3xl font-bold">Workspace Settings</h1>
-      <div className="space-y-8">
+      <div className="space-y-4">
         <Card className="border border-border bg-card/50">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -60,7 +59,20 @@ export default async function GeneralSettings({
           </CardContent>
         </Card>
 
-        <DottedSeparator />
+        <Card className="border border-border bg-card/50">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-2xl">Update Workspace</CardTitle>
+                <CardDescription>
+                  Modify your workspace details below.
+                </CardDescription>
+              </div>
+              <BriefcaseBusiness className="size-8 text-primary" />
+            </div>
+          </CardHeader>
+          <CardContent>ssss</CardContent>
+        </Card>
 
         <DeleteWorkspaceAlert />
       </div>

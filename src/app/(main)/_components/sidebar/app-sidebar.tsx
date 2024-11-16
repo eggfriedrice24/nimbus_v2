@@ -1,7 +1,5 @@
 "use client"
 
-import { useSession } from "@/features/auth/services/use-session"
-import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
 import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -18,6 +16,8 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar"
+import { useSession } from "@/features/auth/services/use-session"
+import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
 
 import { NavProjects } from ".//nav-projects"
 import { NavMain } from "./nav-main"
