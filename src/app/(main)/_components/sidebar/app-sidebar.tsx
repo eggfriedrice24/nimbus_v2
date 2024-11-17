@@ -17,6 +17,7 @@ import {
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/features/auth/services/use-session"
+import { useCreateProjectModal } from "@/features/projects/hooks/use-create-project-modal"
 import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
 
 import { NavProjects } from ".//nav-projects"
@@ -29,6 +30,7 @@ export function AppSidebar() {
   const { data: session, isFetched } = useSession()
 
   const { open } = useCreateWorkspaceModal()
+  const { open: openProjectModal } = useCreateProjectModal()
 
   return (
     <Sidebar collapsible="icon" variant="inset">
@@ -65,7 +67,21 @@ export function AppSidebar() {
         <DottedSeparator className="px-3" />
 
         <SidebarGroup>
-          <SidebarGroupLabel className="font-bold">Projects</SidebarGroupLabel>
+          <div className="mb-2 flex items-center justify-between">
+            <SidebarGroupLabel className="font-bold">
+              Projects
+            </SidebarGroupLabel>
+
+            <Button
+              type="button"
+              className="size-6 bg-sidebar"
+              variant="outline"
+              onClick={openProjectModal}
+            >
+              <Plus className="size-4" />
+            </Button>
+          </div>
+
           <SidebarMenu>
             <NavProjects projects={data.projects} />
           </SidebarMenu>

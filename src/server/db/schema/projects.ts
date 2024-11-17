@@ -21,7 +21,7 @@ export const projects = pgTable("project", {
   }).notNull(),
   emoji: varchar("emoji", {
     length: 20,
-  }),
+  }).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .default(sql`current_timestamp`)
@@ -53,6 +53,7 @@ export const insertProjectschema = createInsertSchema(projects)
     id: true,
     createdAt: true,
     updatedAt: true,
+    userId: true,
   })
 
 // Patch

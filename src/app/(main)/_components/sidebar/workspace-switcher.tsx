@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton } from "@/components/ui/sidebar"
 import { Skeleton } from "@/components/ui/skeleton"
+import { CreateProjectModal } from "@/features/projects/components/create-project-modal"
 import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { useGetWorkspaces } from "@/features/workspaces/services/use-get-workspaces"
@@ -86,6 +87,7 @@ export function WorkspaceSwitcher() {
       </DropdownMenu>
 
       <CreateWorkspaceModal />
+      <CreateProjectModal />
     </>
   )
 }

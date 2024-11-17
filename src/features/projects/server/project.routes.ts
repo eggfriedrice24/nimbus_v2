@@ -68,9 +68,10 @@ const app = new Hono()
         )
       }
 
-      const insertedProject = await db
+      const [insertedProject] = await db
         .insert(projects)
         .values({ name, emoji, workspaceId, userId: user.id ?? "" })
+        .returning()
 
       return c.json(
         {
