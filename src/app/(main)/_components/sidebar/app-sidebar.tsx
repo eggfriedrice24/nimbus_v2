@@ -1,5 +1,7 @@
 "use client"
 
+import * as React from "react"
+
 import { Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -18,7 +20,9 @@ import {
 } from "@/components/ui/sidebar"
 import { useSession } from "@/features/auth/services/use-session"
 import { useCreateProjectModal } from "@/features/projects/hooks/use-create-project-modal"
+import { useGetProjects } from "@/features/projects/services/use-get-projects"
 import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 
 import { NavProjects } from ".//nav-projects"
 import { NavMain } from "./nav-main"
@@ -29,8 +33,14 @@ import { WorkspaceSwitcher } from "./workspace-switcher"
 export function AppSidebar() {
   const { data: session, isFetched } = useSession()
 
+  const workspaceId = useWorkspaceId()
+
+  const { data: projectsData, isLoading } = useGetProjects({ workspaceId })
+
   const { open } = useCreateWorkspaceModal()
   const { open: openProjectModal } = useCreateProjectModal()
+
+  const projects = projectsData?.data
 
   return (
     <Sidebar collapsible="icon" variant="inset">
@@ -83,7 +93,16 @@ export function AppSidebar() {
           </div>
 
           <SidebarMenu>
-            <NavProjects projects={data.projects} />
+            {/* @ts-expect-error sdada */}
+            {!isLoading && projects && <NavProjects projects={projects} />}
+
+            {isLoading && (
+              <>
+                <SidebarMenuSkeleton showIcon className="h-8" />
+                <SidebarMenuSkeleton showIcon className="h-8" />
+                <SidebarMenuSkeleton className="h-8" />
+              </>
+            )}
           </SidebarMenu>
         </SidebarGroup>
 

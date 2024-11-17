@@ -34,7 +34,7 @@ const app = new Hono()
 
       const projectList = await db.query.projects.findMany({
         where: eq(projects.workspaceId, workspaceId),
-        orderBy: (projects, { asc }) => [asc(projects.createdAt)],
+        orderBy: (projects, { desc }) => [desc(projects.createdAt)],
       })
 
       return c.json(

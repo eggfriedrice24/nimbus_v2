@@ -1,10 +1,4 @@
-import {
-  Folder,
-  Forward,
-  MoreHorizontal,
-  Trash2,
-  type LucideIcon,
-} from "lucide-react"
+import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -18,23 +12,20 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { type Project } from "@/server/db/schema/projects"
 
 export function NavProjects({
   projects,
 }: {
-  projects: {
-    name: string
-    url: string
-    icon: LucideIcon
-  }[]
+  projects: Project[]
 } & React.ComponentProps<"ul">) {
   return (
     <>
       {projects.map((item) => (
         <SidebarMenuItem key={item.name} className="min-h-8">
           <SidebarMenuButton asChild className="h-8">
-            <a href={item.url}>
-              <item.icon />
+            <a href="#">
+              <span>{item.emoji}</span>
               <span>{item.name}</span>
             </a>
           </SidebarMenuButton>
