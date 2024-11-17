@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm"
 import { pgTable, timestamp, varchar } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
+import { users } from "./user"
 import { workspaces } from "./workspaces"
 
 export const projects = pgTable("project", {
@@ -9,6 +10,9 @@ export const projects = pgTable("project", {
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
   workspaceId: varchar("workspace_id", { length: 255 })
     .notNull()
     .references(() => workspaces.id, { onDelete: "cascade" }),
@@ -29,6 +33,7 @@ export const projectRelations = relations(projects, ({ one }) => ({
     fields: [projects.workspaceId],
     references: [workspaces.id],
   }),
+  user: one(users, { fields: [projects.userId], references: [users.id] }),
 }))
 
 // Type Exports
@@ -41,8 +46,8 @@ export const selectProjectschema = createSelectSchema(projects)
 export type NewProject = typeof projects.$inferInsert
 export const insertProjectschema = createInsertSchema(projects)
   .required({
-    workspaceId: true,
     name: true,
+    workspaceId: true,
   })
   .omit({
     id: true,
