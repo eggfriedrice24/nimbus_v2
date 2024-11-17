@@ -3,6 +3,7 @@ import { pgTable, timestamp, varchar } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 import { members } from "./members"
+import { projects } from "./projects"
 import { users } from "./user"
 
 export const workspaces = pgTable("workspace", {
@@ -25,6 +26,7 @@ export const workspaces = pgTable("workspace", {
 export const workspacesRelations = relations(workspaces, ({ one, many }) => ({
   user: one(users, { fields: [workspaces.userId], references: [users.id] }),
   members: many(members),
+  project: many(projects),
 }))
 
 // Type Exports
