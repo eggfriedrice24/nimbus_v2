@@ -1,7 +1,8 @@
 "use client"
 
+import * as React from "react"
+
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { Trash2 } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -29,6 +30,7 @@ import { DottedSeparator } from "@/components/ui/separator"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 
 import { useGetMembers } from "../services/use-get-members"
+import { RemoveMemberAlert } from "./remove-member-alert"
 
 export function MemberList() {
   const workspaceId = useWorkspaceId()
@@ -44,11 +46,8 @@ export function MemberList() {
       </CardHeader>
       <CardContent className="grid gap-6">
         {data?.data?.map((m, i) => (
-          <>
-            <div
-              className="flex items-center justify-between space-x-4"
-              key={m.id}
-            >
+          <React.Fragment key={m.id}>
+            <div className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">
                 <Avatar>
                   <AvatarImage src={m.user.image ?? "/avatars/01.png"} />
@@ -106,18 +105,12 @@ export function MemberList() {
                   </PopoverContent>
                 </Popover>
 
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  aria-label="Delete member from workspace"
-                >
-                  <Trash2 className="size-4" />
-                </Button>
+                <RemoveMemberAlert memberId={m.id} />
               </div>
             </div>
 
             {i !== data.data.length - 1 && <DottedSeparator />}
-          </>
+          </React.Fragment>
         ))}
       </CardContent>
     </Card>
