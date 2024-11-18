@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-// import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -34,7 +34,7 @@ type CreateProjectSchemaType = z.infer<typeof insertProjectschema>
 
 export function CreateProjectForm() {
   const { mutate, isPending } = useCreateProject()
-  // const router = useRouter()
+  const router = useRouter()
 
   const { data } = useGetWorkspaces()
 
@@ -51,9 +51,11 @@ export function CreateProjectForm() {
     mutate(
       { json: input },
       {
-        onSuccess: () => {
+        onSuccess: ({ data: projectResponse }) => {
           form.reset()
-          // TODO: redirect to projects screen. void router.push(`/projects`)
+          router.push(
+            `/workspaces/${input.workspaceId}/projects/${projectResponse?.id}`
+          )
         },
       }
     )

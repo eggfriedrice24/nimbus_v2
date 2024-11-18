@@ -46,7 +46,7 @@ export async function getWorkspace(workspaceId: string) {
   const member = await getMember(workspaceId, session.id)
 
   if (!member) {
-    return null
+    throw new Error("Unauthorized.")
   }
 
   const workspace = await db.query.workspaces.findFirst({
