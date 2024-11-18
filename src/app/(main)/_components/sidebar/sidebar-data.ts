@@ -8,8 +8,9 @@ import {
   Settings2,
   UserCog,
   Webhook,
-  type LucideIcon,
 } from "lucide-react"
+
+import type { LucideIcon } from "lucide-react"
 
 export interface NavItem {
   title: string

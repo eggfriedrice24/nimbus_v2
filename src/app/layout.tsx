@@ -1,11 +1,12 @@
-import type { Metadata } from "next"
 import localFont from "next/font/local"
+
+import type { Metadata } from "next"
 
 import "@/styles/globals.css"
 
 import { Toaster } from "sonner"
 
-import QueryProvider from "@/components/query-provider"
+import { QueryProvider } from "@/components/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 
 const geistSans = localFont({

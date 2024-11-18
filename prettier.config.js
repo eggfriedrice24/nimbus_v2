@@ -5,22 +5,29 @@ const config = {
   singleQuote: false,
   tabWidth: 2,
   trailingComma: "es5",
+  importOrderMergeDuplicateImports: true,
+  importOrderCombineTypeAndValueImports: true,
   importOrder: [
-    "^(react/(.*)$)|^(react$)", // React first
+    "^(react/(.*)$)|^(react$)", // React imports
     "",
-    "^(next/(.*)$)|^(next$)", // Next.js imports
-    "<THIRD_PARTY_MODULES>",   // Other external libraries
+    "^(next/(.*)$)|^(next$)",   // Next.js imports
     "",
-    "^@/(.*)$",                // Internal aliases (e.g., @/components)
+    "<THIRD_PARTY_MODULES>",    // Other external libraries
     "",
-    "^[./]",                   // Relative imports
+    "^@/(.*)$",                 // Internal aliases (e.g., @/components)
+    "",
+    "^[./]",                    // Relative imports
+    "",
+    "<TYPES>^(react/(.*)$)|^(react$)", // React type imports
+    "<TYPES>^(next/(.*)$)|^(next$)",   // Next.js type imports
+    "<TYPES><THIRD_PARTY_MODULES>",    // Third-party type imports
+    "<TYPES>^@/(.*)$",                 // Internal alias type imports
+    "<TYPES>^[./]",                    // Relative type imports
   ],
   importOrderSeparation: true, // Enforce blank lines between groups
   importOrderSortSpecifiers: true,
   importOrderBuiltinModulesToTop: true,
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
-  importOrderMergeDuplicateImports: true,
-  importOrderCombineTypeAndValueImports: true,
   tailwindAttributes: ["tw"],
   tailwindFunctions: ["cva"],
   plugins: [

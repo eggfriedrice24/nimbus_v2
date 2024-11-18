@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import { useRouter } from "next/navigation"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { BriefcaseBusiness, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -25,13 +26,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  patchWorkspaceSchema,
-  type Workspace,
-} from "@/server/db/schema/workspaces"
+import { patchWorkspaceSchema } from "@/server/db/schema/workspaces"
 
 import { useWorkspaceId } from "../hooks/use-workspace-id"
 import { useUpdateWorkspace } from "../services/use-update-workspace"
+
+import type { Workspace } from "@/server/db/schema/workspaces"
 
 type UpdateWorkspaceSchemaType = z.infer<typeof patchWorkspaceSchema>
 

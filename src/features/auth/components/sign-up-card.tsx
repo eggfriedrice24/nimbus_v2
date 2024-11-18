@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Square as FcGoogle } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -25,8 +26,10 @@ import { Label } from "@/components/ui/label"
 import { DottedSeparator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 
-import { registerSchema, type RegisterSchemaType } from "../lib/validations"
+import { registerSchema } from "../lib/validations"
 import { useRegister } from "../services/use-register"
+
+import type { RegisterSchemaType } from "../lib/validations"
 
 export const description =
   "A sign up form with first name, last name, email and password inside a card. There's an option to sign up with GitHub and a link to login if you already have an account"
