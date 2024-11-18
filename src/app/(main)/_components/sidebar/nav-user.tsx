@@ -30,13 +30,11 @@ export function NavUser({
       <DropdownMenuTrigger asChild>
         <SidebarMenuButton
           size="lg"
-          className="group data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          className="border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
           <Avatar className="size-8 rounded-lg">
             <AvatarImage src={user.avatar} alt={user.name} />
-            <AvatarFallback className="rounded-lg group-hover:bg-sidebar">
-              TT
-            </AvatarFallback>
+            <AvatarFallback className="rounded-lg">TT</AvatarFallback>
           </Avatar>
 
           <div className="grid flex-1 text-left text-sm leading-tight">

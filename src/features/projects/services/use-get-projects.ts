@@ -7,7 +7,7 @@ type ResponseType = InferResponseType<typeof client.api.projects.$get>
 
 export function useGetProjects({ workspaceId }: { workspaceId: string }) {
   const mutation = useQuery<ResponseType>({
-    queryKey: ["projects"],
+    queryKey: ["projects", workspaceId],
     queryFn: async () => {
       const res = await client.api.projects.$get({ query: { workspaceId } })
 

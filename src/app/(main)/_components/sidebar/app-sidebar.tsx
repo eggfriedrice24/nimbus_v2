@@ -23,6 +23,7 @@ import { useCreateProjectModal } from "@/features/projects/hooks/use-create-proj
 import { useGetProjects } from "@/features/projects/services/use-get-projects"
 import { useCreateWorkspaceModal } from "@/features/workspaces/hooks/use-create-workspace-modal"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
+import { useGetWorkspaces } from "@/features/workspaces/services/use-get-workspaces"
 
 import { NavProjects } from ".//nav-projects"
 import { NavMain } from "./nav-main"
@@ -36,6 +37,7 @@ export function AppSidebar() {
   const workspaceId = useWorkspaceId()
 
   const { data: projectsData, isLoading } = useGetProjects({ workspaceId })
+  const { data: workspaces, isLoading: workspacesLoading } = useGetWorkspaces()
 
   const { open } = useCreateWorkspaceModal()
   const { open: openProjectModal } = useCreateProjectModal()
@@ -61,9 +63,11 @@ export function AppSidebar() {
             </Button>
           </div>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <WorkspaceSwitcher />
-            </SidebarMenuItem>
+            {workspacesLoading && <SidebarMenuSkeleton className="h-12" />}
+            {!workspacesLoading && workspaces && (
+              // @ts-expect-error sdada
+              <WorkspaceSwitcher workspaces={workspaces} />
+            )}
           </SidebarMenu>
         </SidebarGroup>
 
@@ -98,8 +102,8 @@ export function AppSidebar() {
 
             {isLoading && (
               <>
-                <SidebarMenuSkeleton showIcon className="h-8" />
-                <SidebarMenuSkeleton showIcon className="h-8" />
+                <SidebarMenuSkeleton className="h-8" />
+                <SidebarMenuSkeleton className="h-8" />
                 <SidebarMenuSkeleton className="h-8" />
               </>
             )}
@@ -137,7 +141,7 @@ export function AppSidebar() {
                 }}
               />
             ) : (
-              <SidebarMenuSkeleton showIcon className="h-10" />
+              <SidebarMenuSkeleton showIcon className="h-12" />
             )}
           </SidebarMenuItem>
         </SidebarMenu>

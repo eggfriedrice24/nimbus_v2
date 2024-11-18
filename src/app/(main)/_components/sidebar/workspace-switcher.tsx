@@ -13,18 +13,20 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SidebarMenuButton } from "@/components/ui/sidebar"
-import { Skeleton } from "@/components/ui/skeleton"
+import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { CreateProjectModal } from "@/features/projects/components/create-project-modal"
 import { CreateWorkspaceModal } from "@/features/workspaces/components/create-workspace-modal"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
-import { useGetWorkspaces } from "@/features/workspaces/services/use-get-workspaces"
+import { type User } from "@/server/db/schema/user"
+import { type Workspace } from "@/server/db/schema/workspaces"
 
-export function WorkspaceSwitcher() {
+export function WorkspaceSwitcher({
+  workspaces,
+}: {
+  workspaces: (Workspace & { user: User })[]
+}) {
   const router = useRouter()
   const workspaceId = useWorkspaceId()
-
-  const { data: workspaces, isLoading } = useGetWorkspaces()
 
   const activeWorkspace =
     workspaces?.find((ws) => ws.id === workspaceId) ?? workspaces?.[0]
@@ -34,30 +36,26 @@ export function WorkspaceSwitcher() {
   }
 
   return (
-    <>
+    <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          {isLoading ? (
-            <Skeleton className="h-10 w-full rounded" />
-          ) : (
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <BriefcaseBusiness className="size-4 stroke-primary" />
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">
-                  {activeWorkspace?.name}
-                </span>
-                <span className="truncate text-xs">
-                  {activeWorkspace?.user.name}
-                </span>
-              </div>
-              <ChevronsUpDown className="ml-auto" />
-            </SidebarMenuButton>
-          )}
+          <SidebarMenuButton
+            size="lg"
+            className="border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          >
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <BriefcaseBusiness className="size-4 stroke-primary" />
+            </div>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">
+                {activeWorkspace?.name}
+              </span>
+              <span className="truncate text-xs">
+                {activeWorkspace?.user.name}
+              </span>
+            </div>
+            <ChevronsUpDown className="ml-auto" />
+          </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
@@ -88,6 +86,6 @@ export function WorkspaceSwitcher() {
 
       <CreateWorkspaceModal />
       <CreateProjectModal />
-    </>
+    </SidebarMenuItem>
   )
 }

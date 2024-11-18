@@ -1,3 +1,5 @@
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react"
 
 import {
@@ -12,6 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { type Project } from "@/server/db/schema/projects"
 
 export function NavProjects({
@@ -19,15 +22,25 @@ export function NavProjects({
 }: {
   projects: Project[]
 } & React.ComponentProps<"ul">) {
+  const workspaceId = useWorkspaceId()
+
+  const pathname = usePathname()
+
   return (
     <>
       {projects.map((item) => (
         <SidebarMenuItem key={item.name} className="min-h-8">
-          <SidebarMenuButton asChild className="h-8">
-            <a href="#">
+          <SidebarMenuButton
+            asChild
+            className="h-8"
+            isActive={
+              pathname === `/workspaces/${workspaceId}/projects/${item.id}`
+            }
+          >
+            <Link href={`/workspaces/${workspaceId}/projects/${item.id}`}>
               <span>{item.emoji}</span>
               <span>{item.name}</span>
-            </a>
+            </Link>
           </SidebarMenuButton>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
