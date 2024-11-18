@@ -12,6 +12,7 @@ const app = new Hono().basePath("/api")
 app.notFound(notFound)
 app.onError(onError)
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const routes = app
   .route("/auth", authRoutes)
   .route("/workspaces", workspaceRoutes)
