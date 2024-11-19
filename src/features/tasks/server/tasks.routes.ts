@@ -111,13 +111,21 @@ const app = new Hono()
   .post(
     "/",
     sessionMiddleware,
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+        projectId: z.string(),
+      })
+    ),
     zValidator("json", insertTasksSchema),
     async (c) => {
       const user = c.get("user")
 
       const input = c.req.valid("json")
+      const { workspaceId, projectId } = c.req.valid("query")
 
-      const member = await getMember(input.workspaceId, user.id ?? "")
+      const member = await getMember(workspaceId, user.id ?? "")
 
       if (!member) {
         return c.json(
@@ -134,7 +142,7 @@ const app = new Hono()
         where: (tasks, { and, eq }) =>
           and(
             eq(tasks.status, input.status ?? "todo"),
-            eq(tasks.workspaceId, input.workspaceId)
+            eq(tasks.workspaceId, workspaceId)
           ),
         orderBy: (tasks, { asc }) => [asc(tasks.position)],
       })
@@ -145,12 +153,17 @@ const app = new Hono()
 
       const code = generateId()
 
-      const newTask = await db.insert(tasks).values({
-        ...input,
-        position: newPosition,
-        code,
-        ownerId: user.id ?? "",
-      })
+      const newTask = await db
+        .insert(tasks)
+        .values({
+          ...input,
+          workspaceId,
+          projectId,
+          position: newPosition,
+          code,
+          ownerId: user.id ?? "",
+        })
+        .returning()
 
       return c.json(
         {

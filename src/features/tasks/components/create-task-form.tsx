@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ReloadIcon } from "@radix-ui/react-icons"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -34,25 +35,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { useGetMembers } from "@/features/members/services/use-get-members"
 import { useProjectId } from "@/features/projects/hooks/use-project-id"
+import { useGetProjects } from "@/features/projects/services/use-get-projects"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { cn } from "@/lib/utils"
 import { tasks } from "@/server/db/schema"
 import { insertTasksSchema } from "@/server/db/schema/tasks"
 
+import { useCreateTaskModal } from "../hooks/use-create-task-modal"
 import {
   getLabelBadgeVariant,
   getPriorityIcon,
   getStatusIcon,
 } from "../lib/utils"
+import { useCreateTask } from "../services/use-create-task"
 
 type CreateTaskSchemaType = z.infer<typeof insertTasksSchema>
 
 export function CreateTaskForm() {
   const workspaceId = useWorkspaceId()
   const projectId = useProjectId()
+
+  const { close } = useCreateTaskModal()
+
+  const { data: projects, isLoading: projectsLoading } = useGetProjects({
+    workspaceId,
+  })
+
+  const { data: members, isLoading: membersLoading } = useGetMembers({
+    workspaceId,
+  })
+
+  const { mutate, isPending } = useCreateTask()
 
   const form = useForm<CreateTaskSchemaType>({
     resolver: zodResolver(insertTasksSchema),
@@ -64,7 +82,17 @@ export function CreateTaskForm() {
   })
 
   function onSubmit(input: CreateTaskSchemaType) {
-    console.log({ ...input, projectId, workspaceId })
+    const transformedInput = {
+      ...input,
+    }
+
+    mutate({
+      json: transformedInput,
+      query: {
+        workspaceId,
+        projectId,
+      },
+    })
   }
 
   return (
@@ -117,7 +145,7 @@ export function CreateTaskForm() {
                     <Calendar
                       mode="single"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(date) => field.onChange(date)}
                       disabled={(date) =>
                         date < new Date() || date < new Date("1900-01-01")
                       }
@@ -139,20 +167,26 @@ export function CreateTaskForm() {
               <FormLabel>
                 Assignee <span className="text-xs text-destructive">*</span>
               </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select assignee" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectGroup>
-                    {/* Replace with your assignee options */}
-                    <SelectItem value="user1">User 1</SelectItem>
-                    <SelectItem value="user2">User 2</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              {membersLoading && <Skeleton className="h-9 rounded" />}
+              {!membersLoading && members?.data && (
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select assignee" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {members.data.map((m) => (
+                      <SelectItem key={m.id} value={m.user.id}>
+                        {m.user.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
               <FormMessage />
             </FormItem>
           )}
@@ -165,6 +199,7 @@ export function CreateTaskForm() {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
+                {/* @ts-expect-error sad */}
                 <Textarea
                   placeholder="Enter task description"
                   className="resize-none"
@@ -318,7 +353,13 @@ export function CreateTaskForm() {
           )}
         />
 
-        <Button className="w-full" type="submit">
+        <Button className="w-full" type="submit" disabled={isPending}>
+          {isPending && (
+            <ReloadIcon
+              className="mr-2 size-4 animate-spin"
+              aria-hidden="true"
+            />
+          )}
           Create Task
         </Button>
       </form>

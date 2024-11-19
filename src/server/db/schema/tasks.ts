@@ -8,6 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
+import { z } from "zod"
 
 import { projects } from "./projects"
 import { users } from "./user"
@@ -86,6 +87,7 @@ export type NewTask = typeof tasks.$inferInsert
 export const insertTasksSchema = createInsertSchema(tasks, {
   title: (schema) => schema.title.min(1).max(500),
   position: (schema) => schema.position.min(1000).max(1000000),
+  dueDate: () => z.coerce.date(),
 }).omit({
   id: true,
   createdAt: true,
