@@ -90,15 +90,14 @@ const app = new Hono()
     }
   )
   .patch(
-    "/:workspaceId",
-    zValidator(
-      "param",
-      z.object({ projectId: z.string(), workspaceId: z.string() })
-    ),
+    "/:projectId",
+    zValidator("param", z.object({ projectId: z.string() })),
+    zValidator("query", z.object({ workspaceId: z.string() })),
     zValidator("json", patchProjectschema),
     sessionMiddleware,
     async (c) => {
-      const { workspaceId, projectId } = c.req.valid("param")
+      const { projectId } = c.req.valid("param")
+      const { workspaceId } = c.req.valid("query")
       const updates = c.req.valid("json")
 
       const user = c.get("user")
@@ -155,14 +154,13 @@ const app = new Hono()
     }
   )
   .delete(
-    "/:workspaceId",
-    zValidator(
-      "param",
-      z.object({ workspaceId: z.string(), projectId: z.string() })
-    ),
+    "/:projectId",
+    zValidator("param", z.object({ projectId: z.string() })),
+    zValidator("query", z.object({ workspaceId: z.string() })),
     sessionMiddleware,
     async (c) => {
-      const { workspaceId, projectId } = c.req.valid("param")
+      const { projectId } = c.req.valid("param")
+      const { workspaceId } = c.req.valid("query")
 
       const user = c.get("user")
 

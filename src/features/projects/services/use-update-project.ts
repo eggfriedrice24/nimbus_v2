@@ -7,10 +7,11 @@ import { toast } from "sonner"
 import { client } from "@/server/rpc"
 
 type ResponseType = InferResponseType<
-  (typeof client.api.projects)[":workspaceId"]["$patch"]
+  (typeof client.api.projects)[":projectId"]["$patch"],
+  200
 >
 type RequestType = InferRequestType<
-  (typeof client.api.projects)[":workspaceId"]["$patch"]
+  (typeof client.api.projects)[":projectId"]["$patch"]
 >
 
 export function useUpdateProject() {
@@ -18,10 +19,11 @@ export function useUpdateProject() {
   const queryClient = useQueryClient()
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json, param }) => {
-      const response = await client.api.projects[":workspaceId"].$patch({
+    mutationFn: async ({ json, param, query }) => {
+      const response = await client.api.projects[":projectId"].$patch({
         json,
         param,
+        query,
       })
 
       if (!response.ok) {
@@ -30,10 +32,11 @@ export function useUpdateProject() {
 
       return await response.json()
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Project Updated Successfully! 🎉")
       router.refresh()
       void queryClient.invalidateQueries({ queryKey: ["projects"] })
+      void queryClient.invalidateQueries({ queryKey: ["project", data.id] })
     },
     onError: () => {
       toast.error("Failed to Update Project! ❌")

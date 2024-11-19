@@ -7,6 +7,8 @@ import { ChevronLeft } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { getServerSession } from "@/features/auth/lib/queries"
+import { DeleteProjectAlert } from "@/features/projects/components/delete-project-form"
+import { UpdateProjectForm } from "@/features/projects/components/update-project-form"
 import { getProject } from "@/features/projects/lib/queries"
 
 export default async function GeneralSettings({
@@ -23,6 +25,10 @@ export default async function GeneralSettings({
     workspaceId: params.workspaceId,
   })
 
+  if (!project) {
+    throw new Error("Not Found.")
+  }
+
   return (
     <div className="container mx-auto flex max-w-2xl flex-1 flex-col">
       <div className="mb-4 flex items-center justify-between">
@@ -38,7 +44,11 @@ export default async function GeneralSettings({
         <h1 className="text-3xl font-bold">Project Settings</h1>
       </div>
 
-      <div className="flex flex-1 flex-col gap-4"></div>
+      <div className="flex flex-1 flex-col gap-4">
+        <UpdateProjectForm initialValues={project} />
+
+        <DeleteProjectAlert />
+      </div>
     </div>
   )
 }

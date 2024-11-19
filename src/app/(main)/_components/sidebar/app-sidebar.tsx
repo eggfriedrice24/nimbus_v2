@@ -36,8 +36,8 @@ export function AppSidebar() {
 
   const workspaceId = useWorkspaceId()
 
-  const { data: projectsData, isLoading } = useGetProjects({ workspaceId })
   const { data: workspaces, isLoading: workspacesLoading } = useGetWorkspaces()
+  const { data: projectsData, isLoading } = useGetProjects({ workspaceId })
 
   const { open } = useCreateWorkspaceModal()
   const { open: openProjectModal } = useCreateProjectModal()
