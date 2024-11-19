@@ -27,7 +27,7 @@ export function useLogin() {
       void queryClient.invalidateQueries({ queryKey: ["session"] })
     },
     onError: () => {
-      toast.error("Failed to Create Workspace! ❌")
+      toast.error("Failed to Log In! ❌")
     },
   })
 

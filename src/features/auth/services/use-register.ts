@@ -23,12 +23,12 @@ export function useRegister() {
       return await response.json()
     },
     onSuccess: () => {
-      toast.success("User Created! 🎉")
-      router.refresh()
+      toast.success("User Created! You can now Log In. 🎉")
+      router.push('/sign-in')
       void queryClient.invalidateQueries({ queryKey: ["session"] })
     },
     onError: () => {
-      toast.error("Failed to Create Workspace! ❌")
+      toast.error("Failed to Create User! ❌")
     },
   })
 

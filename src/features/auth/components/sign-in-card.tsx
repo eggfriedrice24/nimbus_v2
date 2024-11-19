@@ -49,7 +49,7 @@ export function LoginCard() {
   }
 
   return (
-    <Card>
+    <Card className="sm:w-full sm:max-w-[26rem]">
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
