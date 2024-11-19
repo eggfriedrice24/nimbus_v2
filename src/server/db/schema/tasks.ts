@@ -93,6 +93,8 @@ export const insertTasksSchema = createInsertSchema(tasks, {
   code: true,
   position: true,
   ownerId: true,
+  workspaceId: true,
+  projectId: true,
 })
 
 export const patchTasksSchema = insertTasksSchema.partial()

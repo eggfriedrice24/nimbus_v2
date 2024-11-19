@@ -36,6 +36,27 @@ export function getPriorityIcon(priority: Task["priority"]) {
   return priorityIcons[priority] || CircleIcon
 }
 
+export function getLabelBadgeVariant(
+  label: Task["label"]
+): "default" | "secondary" | "destructive" | "outline" | null | undefined {
+  const variants = {
+    bug: "destructive",
+    enhancement: "default",
+    feature: "outline",
+    documentation: "secondary",
+  }
+
+  return (
+    (variants[label] as
+      | "default"
+      | "secondary"
+      | "destructive"
+      | "outline"
+      | null
+      | undefined) ?? "outline"
+  )
+}
+
 const prefixes = {
   task: "tsk",
 }
