@@ -27,11 +27,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { patchWorkspaceSchema } from "@/server/db/schema/workspaces"
+import type { Workspace } from "@/server/db/schema/workspaces"
 
 import { useWorkspaceId } from "../hooks/use-workspace-id"
 import { useUpdateWorkspace } from "../services/use-update-workspace"
-
-import type { Workspace } from "@/server/db/schema/workspaces"
 
 type UpdateWorkspaceSchemaType = z.infer<typeof patchWorkspaceSchema>
 

@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import type { InferRequestType, InferResponseType } from "hono"
 import { toast } from "sonner"
 
 import { client } from "@/server/rpc"
-
-import type { InferRequestType, InferResponseType } from "hono"
 
 type ResponseType = InferResponseType<
   (typeof client.api.workspaces)[":workspaceId"]["reset-invite-code"]["$post"],

@@ -2,7 +2,7 @@ import { zValidator } from "@hono/zod-validator"
 import { eq } from "drizzle-orm"
 import { Hono } from "hono"
 import * as HttpStatusCodes from "stoker/http-status-codes"
-import * as HttpStatusPhrases from "stoker/http-status-codes"
+import * as HttpStatusPhrases from "stoker/http-status-phrases"
 import { z } from "zod"
 
 import { getMember } from "@/features/members/lib/queries"
@@ -180,7 +180,7 @@ const app = new Hono()
             success: false,
             data: null,
             error: {
-              message: "Not Found.",
+              message: HttpStatusPhrases.NOT_FOUND,
             },
           },
           HttpStatusCodes.NOT_FOUND
