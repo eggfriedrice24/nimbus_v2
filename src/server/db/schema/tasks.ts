@@ -1,5 +1,12 @@
 import { relations, sql } from "drizzle-orm"
-import { boolean, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core"
+import {
+  boolean,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 import { projects } from "./projects"
@@ -33,6 +40,7 @@ export const tasks = pgTable("tasks", {
     .default("low"),
   archived: boolean("archived").notNull().default(false),
   dueDate: timestamp("due_date").notNull(),
+  position: integer("position").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .default(sql`current_timestamp`)
@@ -71,14 +79,20 @@ export const taskRelations = relations(tasks, ({ one }) => ({
   }),
 }))
 
+export type Task = typeof tasks.$inferSelect
 export const selectTasksSchema = createSelectSchema(tasks)
 
+export type NewTask = typeof tasks.$inferInsert
 export const insertTasksSchema = createInsertSchema(tasks, {
   title: (schema) => schema.title.min(1).max(500),
+  position: (schema) => schema.position.min(1000).max(1000000),
 }).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  code: true,
+  position: true,
+  ownerId: true,
 })
 
 export const patchTasksSchema = insertTasksSchema.partial()

@@ -42,9 +42,9 @@ export function WorkspaceSwitcher({
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton
             size="lg"
-            className="border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            className="group border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-primary-foreground group-hover:bg-sidebar">
               <BriefcaseBusiness className="size-4 stroke-primary" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
