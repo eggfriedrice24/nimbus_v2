@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm"
 import { pgTable, timestamp, varchar } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
+import { tasks } from "./tasks"
 import { users } from "./user"
 import { workspaces } from "./workspaces"
 
@@ -28,12 +29,13 @@ export const projects = pgTable("project", {
     .$onUpdate(() => new Date()),
 })
 
-export const projectRelations = relations(projects, ({ one }) => ({
+export const projectRelations = relations(projects, ({ one, many }) => ({
   workspace: one(workspaces, {
     fields: [projects.workspaceId],
     references: [workspaces.id],
   }),
   user: one(users, { fields: [projects.userId], references: [users.id] }),
+  task: many(tasks),
 }))
 
 // Type Exports
