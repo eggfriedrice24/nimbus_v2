@@ -79,8 +79,12 @@ export function TaskViewSwitcher() {
           <TabsContent value="kanban">
             {isLoading ? <TailSpin /> : JSON.stringify(tasks)}
           </TabsContent>
-          <TabsContent value="table">Table View</TabsContent>
-          <TabsContent value="calendar">Calendar View</TabsContent>
+          <TabsContent value="table">
+            {isLoading ? <TailSpin /> : JSON.stringify(tasks)}
+          </TabsContent>
+          <TabsContent value="calendar">
+            {isLoading ? <TailSpin /> : JSON.stringify(tasks)}
+          </TabsContent>
         </div>
       </Tabs>
 
