@@ -5,7 +5,7 @@ import * as React from "react"
 import { useDataTable } from "@/hooks/use-data-table"
 import { type Task } from "@/server/db/schema/tasks"
 
-import { DataTable } from "./data-table"
+import { DataTable } from "../../../../components/data-table/data-table"
 import { getColumns } from "./tasks-table-columns"
 
 interface TasksTableProps {

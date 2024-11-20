@@ -17,9 +17,9 @@ import { useTaskFilters } from "../hooks/use-task-filters"
 import { useBatchUpdateTasks } from "../services/use-batch-update-tasks"
 import { useGettasks } from "../services/use-get-tasks"
 import { CreateTaskModal } from "./create-task-modal"
-import TasksKanbanBoard from "./data-kanban/data-kanban"
-import { DataTableSkeleton } from "./data-table/data-table-skeleton"
-import { TasksTable } from "./data-table/tasks-table"
+import TasksKanbanBoard from "./tasks-kanban/data-kanban"
+import { DataTableSkeleton } from "../../../components/data-table/data-table-skeleton"
+import { TasksTable } from "./tasks-table/tasks-table"
 import { TasksDataFilters } from "./tasks-data-filters"
 
 export function TaskViewSwitcher() {

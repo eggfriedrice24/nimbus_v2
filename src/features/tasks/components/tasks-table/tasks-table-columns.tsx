@@ -30,7 +30,7 @@ import {
   getPriorityIcon,
   getStatusIcon,
 } from "../../lib/utils"
-import { DataTableColumnHeader } from "./data-table-column-header"
+import { DataTableColumnHeader } from "../../../../components/data-table/data-table-column-header"
 
 export function getColumns(): ColumnDef<Task>[] {
   return [
