@@ -9,18 +9,20 @@ import { TailSpin } from "@/components/tailspin"
 import { Button } from "@/components/ui/button"
 import { DottedSeparator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useProjectId } from "@/features/projects/hooks/use-project-id"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { type Task } from "@/server/db/schema/tasks"
 
+import { DataTableSkeleton } from "../../../components/data-table/data-table-skeleton"
 import { useCreateTaskModal } from "../hooks/use-create-task-modal"
 import { useTaskFilters } from "../hooks/use-task-filters"
 import { useBatchUpdateTasks } from "../services/use-batch-update-tasks"
 import { useGettasks } from "../services/use-get-tasks"
 import { CreateTaskModal } from "./create-task-modal"
-import TasksKanbanBoard from "./tasks-kanban/data-kanban"
-import { DataTableSkeleton } from "../../../components/data-table/data-table-skeleton"
-import { TasksTable } from "./tasks-table/tasks-table"
+import TasksCalendar from "./tasks-calendar/tasks-calendar"
 import { TasksDataFilters } from "./tasks-data-filters"
+import TasksKanbanBoard from "./tasks-kanban/data-kanban"
+import { TasksTable } from "./tasks-table/tasks-table"
 
 export function TaskViewSwitcher() {
   const [view, setView] = useQueryState("task-view", {
@@ -29,9 +31,9 @@ export function TaskViewSwitcher() {
   const { open } = useCreateTaskModal()
 
   const workspaceId = useWorkspaceId()
+  const projectId = useProjectId()
 
-  const [{ projectId, dueDate, assigneeId, label, status, priority }] =
-    useTaskFilters()
+  const [{ dueDate, assigneeId, label, status, priority }] = useTaskFilters()
 
   const { data: tasks, isLoading } = useGettasks({
     filters: {
@@ -102,7 +104,7 @@ export function TaskViewSwitcher() {
               />
             )}
           </TabsContent>
-          <TabsContent value="table" className="flex-1">
+          <TabsContent value="table" className="h-full flex-1">
             {isLoading && (
               <DataTableSkeleton
                 columnCount={6}
@@ -113,9 +115,10 @@ export function TaskViewSwitcher() {
             {/* @ts-expect-error sad */}
             {!isLoading && tasks?.data && <TasksTable tasks={tasks.data} />}
           </TabsContent>
-          <TabsContent value="calendar" className="flex-1">
+          <TabsContent value="calendar" className="h-full flex-1">
             {isLoading && <TailSpin />}
-            {!isLoading && tasks?.data && JSON.stringify(tasks)}
+            {/* @ts-expect-error sad */}
+            {!isLoading && tasks?.data && <TasksCalendar tasks={tasks.data} />}
           </TabsContent>
         </div>
       </Tabs>
