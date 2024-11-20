@@ -12,6 +12,7 @@ import {
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { type Task } from "@/server/db/schema/tasks"
+import { type User } from "@/server/db/schema/user"
 
 import { KanbanCard } from "./kanban-card"
 import { KanbanColumnHeader } from "./kanban-col-header"
@@ -84,13 +85,12 @@ export default function TasksKanbanBoard({
 
       const destStatus = destination.droppableId as Task["status"]
 
-      const updatesPayload: {
+      let updatesPayload: {
         id: string
         status: Task["status"]
         position: number
       }[] = []
 
-      // @ts-expect-error sad
       setTasksState((prev) => {
         const newTasks = { ...prev }
 
@@ -115,6 +115,8 @@ export default function TasksKanbanBoard({
         destCol.splice(destination.index, 0, updatedTask)
 
         newTasks[destStatus] = destCol
+
+        updatesPayload = []
 
         updatesPayload.push({
           id: updatedTask.id,
@@ -153,6 +155,7 @@ export default function TasksKanbanBoard({
 
           return newTasks
         }
+        return newTasks
       })
 
       onKanbanChange(updatesPayload)
@@ -162,12 +165,12 @@ export default function TasksKanbanBoard({
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <ScrollArea className="max-w-[calc(100vw-22rem)]">
-        <div className="flex w-max space-x-4 p-4">
+      <ScrollArea className="h-full max-w-[calc(100vw-22rem)]">
+        <div className="flex h-full w-max space-x-4 p-4">
           {statusColumns.map((column) => {
             return (
-              <div key={column} className="w-80 shrink-0">
-                <Card className="rounded-xl">
+              <div key={column} className="h-full w-80 shrink-0">
+                <Card className="h-full rounded-xl bg-sidebar">
                   <KanbanColumnHeader
                     column={column}
                     count={tasksState[column].length}
@@ -194,7 +197,9 @@ export default function TasksKanbanBoard({
                                   {...provided.dragHandleProps}
                                   className="mb-3 rounded-xl border bg-background p-4 shadow-sm transition-all hover:shadow-md"
                                 >
-                                  <KanbanCard task={task} />
+                                  <KanbanCard
+                                    task={task as Task & { assignee: User }}
+                                  />
                                 </div>
                               )
                             }}

@@ -10,9 +10,9 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
 
-import { projects } from "./projects"
-import { users } from "./user"
-import { workspaces } from "./workspaces"
+import { projects, type Project } from "./projects"
+import { users, type User } from "./user"
+import { workspaces, type Workspace } from "./workspaces"
 
 export const tasks = pgTable("tasks", {
   id: varchar("id", { length: 255 })
@@ -80,7 +80,12 @@ export const taskRelations = relations(tasks, ({ one }) => ({
   }),
 }))
 
-export type Task = typeof tasks.$inferSelect
+export type Task = typeof tasks.$inferSelect & {
+  workspace: Workspace
+  project: Project
+  assignee: User
+  owner: User
+}
 export const selectTasksSchema = createSelectSchema(tasks, {
   projectId: (schema) => schema.projectId.optional().nullable(),
   assigneeId: (schema) => schema.assigneeId.optional().nullable(),

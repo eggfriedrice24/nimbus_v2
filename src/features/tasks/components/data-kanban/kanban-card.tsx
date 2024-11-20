@@ -49,9 +49,9 @@ export function KanbanCard({ task }: { task: Task }) {
         <div className="flex items-center gap-2">
           <Avatar className="size-6">
             <AvatarImage src="#" />
-            <AvatarFallback>TK</AvatarFallback>
+            <AvatarFallback>{task.assignee.name.charAt(0)}</AvatarFallback>
           </Avatar>
-          <span className="text-xs text-gray-500">Tako Kikoria</span>
+          <span className="text-xs text-gray-500">{task.assignee.name}</span>
         </div>
         <div className="flex items-center gap-1">
           <Calendar

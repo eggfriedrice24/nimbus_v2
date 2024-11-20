@@ -9,7 +9,6 @@ import { TailSpin } from "@/components/tailspin"
 import { Button } from "@/components/ui/button"
 import { DottedSeparator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useProjectId } from "@/features/projects/hooks/use-project-id"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { type Task } from "@/server/db/schema/tasks"
 
@@ -30,7 +29,6 @@ export function TaskViewSwitcher() {
   const { open } = useCreateTaskModal()
 
   const workspaceId = useWorkspaceId()
-  const projectIdParam = useProjectId()
 
   const [{ projectId, dueDate, assigneeId, label, status, priority }] =
     useTaskFilters()
@@ -53,10 +51,9 @@ export function TaskViewSwitcher() {
     (tasks: { id: string; status: Task["status"]; position: number }[]) => {
       mutate({
         json: { updates: tasks },
-        query: { projectId: projectIdParam, workspaceId },
       })
     },
-    [mutate, projectIdParam, workspaceId]
+    [mutate]
   )
 
   return (
@@ -95,7 +92,7 @@ export function TaskViewSwitcher() {
         <DottedSeparator className="my-4" />
 
         <div className="flex w-full flex-1">
-          <TabsContent value="kanban">
+          <TabsContent value="kanban" className="h-full flex-1">
             {isLoading && <TailSpin />}
             {!isLoading && tasks?.data && (
               <TasksKanbanBoard
@@ -116,7 +113,7 @@ export function TaskViewSwitcher() {
             {/* @ts-expect-error sad */}
             {!isLoading && tasks?.data && <TasksTable tasks={tasks.data} />}
           </TabsContent>
-          <TabsContent value="calendar">
+          <TabsContent value="calendar" className="flex-1">
             {isLoading && <TailSpin />}
             {!isLoading && tasks?.data && JSON.stringify(tasks)}
           </TabsContent>

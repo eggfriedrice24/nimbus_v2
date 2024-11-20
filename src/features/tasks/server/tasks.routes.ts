@@ -15,8 +15,6 @@ import {
 } from "@/server/db/schema/tasks"
 import { sessionMiddleware } from "@/server/session-middleware"
 
-import { StatusEnum } from "../hooks/use-task-filters"
-
 const app = new Hono()
   .get(
     "/",
@@ -241,24 +239,24 @@ const app = new Hono()
       )
     }
   )
-  .patch(
+  .post(
     "/batch-update",
     sessionMiddleware,
-    zValidator(
-      "query",
-      z.object({
-        workspaceId: z.string(),
-        projectId: z.string(),
-      })
-    ),
     zValidator(
       "json",
       z.object({
         updates: z.array(
           z.object({
             id: z.string(),
-            status: z.nativeEnum(StatusEnum),
-            position: z.number(),
+            status: z.enum([
+              "backlog",
+              "todo",
+              "in-progress",
+              "in-review",
+              "done",
+              "canceled",
+            ]),
+            position: z.number().int().positive().min(1000).max(1_000_000),
           })
         ),
       })
@@ -266,10 +264,33 @@ const app = new Hono()
     async (c) => {
       const user = c.get("user")
 
-      const { workspaceId, projectId } = c.req.valid("query")
       const { updates } = c.req.valid("json")
 
-      const member = await getMember(workspaceId, user.id ?? "")
+      const taskIds = updates.map((update) => update.id)
+
+      const existingTasks = await db.query.tasks.findMany({
+        where: (tasks, { and, inArray }) => and(inArray(tasks.id, taskIds)),
+        with: { workspace: true },
+      })
+
+      const workspaceIds = new Set(existingTasks.map((i) => i.workspace.id))
+
+      if (workspaceIds.size !== 1) {
+        return c.json(
+          {
+            success: false,
+            data: null,
+            error: {
+              message: "One or more tasks not found or not in this workspace.",
+            },
+          },
+          HttpStatusCodes.BAD_REQUEST
+        )
+      }
+
+      const workspaceId = workspaceIds.values().next().value
+
+      const member = await getMember(workspaceId ?? "", user.id ?? "")
       if (!member) {
         return c.json(
           {
@@ -281,38 +302,14 @@ const app = new Hono()
         )
       }
 
-      const taskIds = updates.map((update) => update.id)
-
-      const existingTasks = await db.query.tasks.findMany({
-        where: (tasks, { and, inArray }) =>
-          and(
-            inArray(tasks.id, taskIds),
-            eq(tasks.workspaceId, workspaceId),
-            eq(tasks.projectId, projectId)
-          ),
-      })
-
-      if (existingTasks.length !== taskIds.length) {
-        return c.json(
-          {
-            success: false,
-            data: null,
-            error: {
-              message:
-                "One or more tasks not found or not in this workspace/project.",
-            },
-          },
-          HttpStatusCodes.BAD_REQUEST
-        )
-      }
-
       const updatedTasks = await db.transaction(async (tx) => {
         const results = []
         for (const update of updates) {
           const updatedTask = await tx
             .update(tasks)
             .set({
-              ...update,
+              status: update.status,
+              position: update.position,
             })
             .where(eq(tasks.id, update.id))
             .returning()
