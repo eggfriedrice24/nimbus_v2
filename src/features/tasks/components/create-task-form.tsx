@@ -40,13 +40,11 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { useGetMembers } from "@/features/members/services/use-get-members"
 import { useProjectId } from "@/features/projects/hooks/use-project-id"
-import { useGetProjects } from "@/features/projects/services/use-get-projects"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { cn } from "@/lib/utils"
 import { tasks } from "@/server/db/schema"
 import { insertTasksSchema } from "@/server/db/schema/tasks"
 
-import { useCreateTaskModal } from "../hooks/use-create-task-modal"
 import {
   getLabelBadgeVariant,
   getPriorityIcon,
@@ -59,12 +57,6 @@ type CreateTaskSchemaType = z.infer<typeof insertTasksSchema>
 export function CreateTaskForm() {
   const workspaceId = useWorkspaceId()
   const projectId = useProjectId()
-
-  const { close } = useCreateTaskModal()
-
-  const { data: projects, isLoading: projectsLoading } = useGetProjects({
-    workspaceId,
-  })
 
   const { data: members, isLoading: membersLoading } = useGetMembers({
     workspaceId,
@@ -232,7 +224,7 @@ export function CreateTaskForm() {
                   <SelectContent>
                     <SelectGroup>
                       {tasks.status.enumValues.map((item) => {
-                        const Icon = getStatusIcon(item)
+                        const { icon: Icon, color } = getStatusIcon(item)
                         return (
                           <SelectItem
                             key={item}
@@ -240,7 +232,7 @@ export function CreateTaskForm() {
                             className="capitalize"
                           >
                             <div className="flex items-center">
-                              <Icon className="mr-2 size-4" />
+                              <Icon className={cn("mr-2 size-4", color)} />
                               {item}
                             </div>
                           </SelectItem>
@@ -310,7 +302,7 @@ export function CreateTaskForm() {
                   <SelectContent>
                     <SelectGroup>
                       {tasks.priority.enumValues.map((item) => {
-                        const Icon = getPriorityIcon(item)
+                        const { icon: Icon, color } = getPriorityIcon(item)
 
                         return (
                           <SelectItem
@@ -319,7 +311,7 @@ export function CreateTaskForm() {
                             className="capitalize"
                           >
                             <div className="flex items-center">
-                              <Icon className="mr-2 size-4" />
+                              <Icon className={cn("mr-2 size-4", color)} />
                               {item}
                             </div>
                           </SelectItem>

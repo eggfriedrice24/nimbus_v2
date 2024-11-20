@@ -81,7 +81,24 @@ export const taskRelations = relations(tasks, ({ one }) => ({
 }))
 
 export type Task = typeof tasks.$inferSelect
-export const selectTasksSchema = createSelectSchema(tasks)
+export const selectTasksSchema = createSelectSchema(tasks, {
+  projectId: (schema) => schema.projectId.optional().nullable(),
+  assigneeId: (schema) => schema.assigneeId.optional().nullable(),
+  status: (schema) => schema.status.optional().nullable(),
+  label: (schema) => schema.label.optional().nullable(),
+  priority: (schema) => schema.priority.optional().nullable(),
+  title: (schema) => schema.title.optional().nullable(),
+  dueDate: () => z.coerce.date().optional().nullable(),
+}).omit({
+  description: true,
+  updatedAt: true,
+  position: true,
+  id: true,
+  code: true,
+  ownerId: true,
+  archived: true,
+  createdAt: true,
+})
 
 export type NewTask = typeof tasks.$inferInsert
 export const insertTasksSchema = createInsertSchema(tasks, {

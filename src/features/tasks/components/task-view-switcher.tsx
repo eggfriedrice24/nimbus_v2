@@ -2,37 +2,43 @@
 
 import * as React from "react"
 
-import {
-  Bot,
-  Calendar,
-  Folders,
-  Kanban,
-  ListTodo,
-  Plus,
-  Table,
-} from "lucide-react"
+import { Calendar, Kanban, Plus, Table } from "lucide-react"
 import { useQueryState } from "nuqs"
 
+import { TailSpin } from "@/components/tailspin"
 import { Button } from "@/components/ui/button"
 import { DottedSeparator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 
 import { useCreateTaskModal } from "../hooks/use-create-task-modal"
-import { type getTasks } from "../lib/queries"
+import { useTaskFilters } from "../hooks/use-task-filters"
+import { useGettasks } from "../services/use-get-tasks"
 import { CreateTaskModal } from "./create-task-modal"
 import { TasksDataFilters } from "./tasks-data-filters"
 
-export function TaskViewSwitcher({
-  tasksPromise,
-}: {
-  tasksPromise: ReturnType<typeof getTasks>
-}) {
+export function TaskViewSwitcher() {
   const [view, setView] = useQueryState("task-view", {
     defaultValue: "kanban",
   })
   const { open } = useCreateTaskModal()
 
-  const tasks = React.use(tasksPromise)
+  const workspaceId = useWorkspaceId()
+
+  const [{ projectId, dueDate, assigneeId, label, status, priority }] =
+    useTaskFilters()
+
+  const { data: tasks, isLoading } = useGettasks({
+    filters: {
+      workspaceId,
+      projectId,
+      dueDate,
+      assigneeId,
+      label,
+      status,
+      priority,
+    },
+  })
 
   return (
     <>
@@ -70,7 +76,9 @@ export function TaskViewSwitcher({
         <DottedSeparator className="my-4" />
 
         <div className="flex w-full flex-1 items-center justify-center">
-          <TabsContent value="kanban">{JSON.stringify(tasks)}</TabsContent>
+          <TabsContent value="kanban">
+            {isLoading ? <TailSpin /> : JSON.stringify(tasks)}
+          </TabsContent>
           <TabsContent value="table">Table View</TabsContent>
           <TabsContent value="calendar">Calendar View</TabsContent>
         </div>

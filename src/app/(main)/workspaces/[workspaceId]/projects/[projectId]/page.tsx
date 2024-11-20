@@ -5,12 +5,10 @@ import { redirect } from "next/navigation"
 
 import { Edit3 } from "lucide-react"
 
-import { TailSpin } from "@/components/tailspin"
 import { Button } from "@/components/ui/button"
 import { getServerSession } from "@/features/auth/lib/queries"
 import { getProject } from "@/features/projects/lib/queries"
 import { TaskViewSwitcher } from "@/features/tasks/components/task-view-switcher"
-import { getTasks } from "@/features/tasks/lib/queries"
 
 export default async function Projects({
   params,
@@ -29,11 +27,6 @@ export default async function Projects({
   if (!project) {
     throw new Error("Project not found.")
   }
-
-  const tasksPromise = getTasks({
-    projectId: params.projectId,
-    workspaceId: params.workspaceId,
-  })
 
   return (
     <div className="flex flex-1 flex-col gap-8">
@@ -60,9 +53,7 @@ export default async function Projects({
       </div>
 
       <section className="flex flex-1 rounded-lg border p-2">
-        <React.Suspense fallback={<TailSpin />}>
-          <TaskViewSwitcher tasksPromise={tasksPromise} />
-        </React.Suspense>
+        <TaskViewSwitcher />
       </section>
     </div>
   )

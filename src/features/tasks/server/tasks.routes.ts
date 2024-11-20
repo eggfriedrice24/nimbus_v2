@@ -1,12 +1,16 @@
 import { zValidator } from "@hono/zod-validator"
-import { eq, like } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { Hono } from "hono"
 import * as HttpStatusCodes from "stoker/http-status-codes"
 import { z } from "zod"
 
 import { getMember } from "@/features/members/lib/queries"
 import { db } from "@/server/db"
-import { insertTasksSchema, tasks } from "@/server/db/schema/tasks"
+import {
+  insertTasksSchema,
+  selectTasksSchema,
+  tasks,
+} from "@/server/db/schema/tasks"
 import { sessionMiddleware } from "@/server/session-middleware"
 
 import { generateId } from "../lib/utils"
@@ -15,30 +19,7 @@ const app = new Hono()
   .get(
     "/",
     sessionMiddleware,
-    zValidator(
-      "query",
-      z.object({
-        workspaceId: z.string(),
-        projectId: z.string().nullish(),
-        assigneeId: z.string().nullish(),
-        label: z
-          .enum(["bug", "feature", "enhancement", "documentation"])
-          .nullish(),
-        status: z
-          .enum([
-            "backlog",
-            "todo",
-            "in-progress",
-            "in-review",
-            "done",
-            "canceled",
-          ])
-          .nullish(),
-        priority: z.enum(["low", "medium", "high"]).nullish(),
-        search: z.string().nullish(),
-        dueDate: z.date().nullish(),
-      })
-    ),
+    zValidator("query", selectTasksSchema),
     async (c) => {
       const user = c.get("user")
 
@@ -47,8 +28,9 @@ const app = new Hono()
         projectId,
         assigneeId,
         status,
+        label,
         priority,
-        search,
+        title,
         dueDate,
       } = c.req.valid("query")
 
@@ -67,6 +49,13 @@ const app = new Hono()
 
       const query = [eq(tasks.workspaceId, workspaceId)]
 
+      if (title) {
+        query.push(eq(tasks.title, title))
+      }
+      if (label) {
+        query.push(eq(tasks.label, label))
+      }
+
       if (projectId) {
         query.push(eq(tasks.projectId, projectId))
       }
@@ -81,10 +70,6 @@ const app = new Hono()
       }
       if (dueDate) {
         query.push(eq(tasks.dueDate, dueDate))
-      }
-
-      if (search) {
-        query.push(like(tasks.title, `%${search}%`))
       }
 
       const tasksData = await db.query.tasks.findMany({
