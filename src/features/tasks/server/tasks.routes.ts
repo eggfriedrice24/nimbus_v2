@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator"
 import { eq } from "drizzle-orm"
 import { Hono } from "hono"
+import { customAlphabet } from "nanoid"
 import * as HttpStatusCodes from "stoker/http-status-codes"
 import { z } from "zod"
 
@@ -12,8 +13,6 @@ import {
   tasks,
 } from "@/server/db/schema/tasks"
 import { sessionMiddleware } from "@/server/session-middleware"
-
-import { generateId } from "../lib/utils"
 
 const app = new Hono()
   .get(
@@ -136,7 +135,7 @@ const app = new Hono()
         ? highestPositionTask.position + 1000
         : 1000
 
-      const code = generateId()
+      const code = `TASK-${customAlphabet("0123456789", 4)()}`
 
       const newTask = await db
         .insert(tasks)

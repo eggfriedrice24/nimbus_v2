@@ -15,6 +15,8 @@ import { useCreateTaskModal } from "../hooks/use-create-task-modal"
 import { useTaskFilters } from "../hooks/use-task-filters"
 import { useGettasks } from "../services/use-get-tasks"
 import { CreateTaskModal } from "./create-task-modal"
+import { DataTableSkeleton } from "./data-table/data-table-skeleton"
+import { TasksTable } from "./data-table/tasks-table"
 import { TasksDataFilters } from "./tasks-data-filters"
 
 export function TaskViewSwitcher() {
@@ -75,15 +77,25 @@ export function TaskViewSwitcher() {
 
         <DottedSeparator className="my-4" />
 
-        <div className="flex w-full flex-1 items-center justify-center">
+        <div className="flex w-full flex-1">
           <TabsContent value="kanban">
-            {isLoading ? <TailSpin /> : JSON.stringify(tasks)}
+            {isLoading && <TailSpin />}
+            {!isLoading && tasks?.data && JSON.stringify(tasks)}
           </TabsContent>
-          <TabsContent value="table">
-            {isLoading ? <TailSpin /> : JSON.stringify(tasks)}
+          <TabsContent value="table" className="flex-1">
+            {isLoading && (
+              <DataTableSkeleton
+                columnCount={6}
+                rowCount={10}
+                withPagination={false}
+              />
+            )}
+            {/* @ts-expect-error sad */}
+            {!isLoading && tasks?.data && <TasksTable tasks={tasks.data} />}
           </TabsContent>
           <TabsContent value="calendar">
-            {isLoading ? <TailSpin /> : JSON.stringify(tasks)}
+            {isLoading && <TailSpin />}
+            {!isLoading && tasks?.data && JSON.stringify(tasks)}
           </TabsContent>
         </div>
       </Tabs>

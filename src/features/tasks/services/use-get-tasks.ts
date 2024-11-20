@@ -6,14 +6,13 @@ import { type selectTasksSchema } from "@/server/db/schema/tasks"
 import { client } from "@/server/rpc"
 
 type ResponseType = InferResponseType<typeof client.api.tasks.$get>
-type RequestType = InferRequestType<typeof client.api.tasks.$get>
 
 interface useGetTasksProps {
   filters: z.infer<typeof selectTasksSchema>
 }
 
 export function useGettasks({ filters }: useGetTasksProps) {
-  const mutation = useQuery<ResponseType, Error, RequestType>({
+  const mutation = useQuery<ResponseType>({
     queryKey: ["tasks", filters],
     queryFn: async () => {
       const {

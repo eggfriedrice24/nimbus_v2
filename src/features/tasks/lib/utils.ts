@@ -9,7 +9,6 @@ import {
   QuestionMarkCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons"
-import { customAlphabet } from "nanoid"
 
 import { type Task } from "@/server/db/schema/tasks"
 
@@ -71,24 +70,4 @@ export function getLabelBadgeVariant(
       | null
       | undefined) ?? "outline"
   )
-}
-
-const prefixes = {
-  task: "tsk",
-}
-
-interface GenerateIdOptions {
-  length?: number
-  separator?: string
-}
-
-export function generateId(
-  prefix?: keyof typeof prefixes,
-  { length = 12, separator = "_" }: GenerateIdOptions = {}
-) {
-  const id = customAlphabet(
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-    length
-  )()
-  return prefix ? `${prefixes[prefix]}${separator}${id}` : id
 }
