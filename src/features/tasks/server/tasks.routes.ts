@@ -9,10 +9,13 @@ import { getMember } from "@/features/members/lib/queries"
 import { db } from "@/server/db"
 import {
   insertTasksSchema,
+  patchTasksSchema,
   selectTasksSchema,
   tasks,
 } from "@/server/db/schema/tasks"
 import { sessionMiddleware } from "@/server/session-middleware"
+
+import { StatusEnum } from "../hooks/use-task-filters"
 
 const app = new Hono()
   .get(
@@ -156,6 +159,176 @@ const app = new Hono()
           error: null,
         },
         HttpStatusCodes.CREATED
+      )
+    }
+  )
+  .patch(
+    "/:taskId",
+    sessionMiddleware,
+    zValidator(
+      "param",
+      z.object({
+        taskId: z.string(),
+      })
+    ),
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+        projectId: z.string(),
+      })
+    ),
+    zValidator("json", patchTasksSchema),
+    async (c) => {
+      const user = c.get("user")
+
+      const { taskId } = c.req.valid("param")
+      const { workspaceId, projectId } = c.req.valid("query")
+      const updates = c.req.valid("json")
+
+      const member = await getMember(workspaceId, user.id ?? "")
+
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            data: null,
+            error: { message: "Unauthorized." },
+          },
+          HttpStatusCodes.FORBIDDEN
+        )
+      }
+
+      const task = await db.query.tasks.findFirst({
+        where: (tasks, { and, eq }) =>
+          and(
+            eq(tasks.id, taskId),
+            eq(tasks.workspaceId, workspaceId),
+            eq(tasks.projectId, projectId)
+          ),
+      })
+
+      if (!task) {
+        return c.json(
+          {
+            success: false,
+            data: null,
+            error: {
+              message:
+                "Task not found or does not belong to this workspace/project.",
+            },
+          },
+          HttpStatusCodes.NOT_FOUND
+        )
+      }
+
+      const [updatedTask] = await db
+        .update(tasks)
+        .set({
+          ...updates,
+          updatedAt: new Date(),
+        })
+        .where(eq(tasks.id, taskId))
+        .returning()
+
+      return c.json(
+        {
+          success: true,
+          data: updatedTask,
+          error: null,
+        },
+        HttpStatusCodes.OK
+      )
+    }
+  )
+  .patch(
+    "/batch-update",
+    sessionMiddleware,
+    zValidator(
+      "query",
+      z.object({
+        workspaceId: z.string(),
+        projectId: z.string(),
+      })
+    ),
+    zValidator(
+      "json",
+      z.object({
+        updates: z.array(
+          z.object({
+            id: z.string(),
+            status: z.nativeEnum(StatusEnum),
+            position: z.number(),
+          })
+        ),
+      })
+    ),
+    async (c) => {
+      const user = c.get("user")
+
+      const { workspaceId, projectId } = c.req.valid("query")
+      const { updates } = c.req.valid("json")
+
+      const member = await getMember(workspaceId, user.id ?? "")
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            data: null,
+            error: { message: "Unauthorized." },
+          },
+          HttpStatusCodes.FORBIDDEN
+        )
+      }
+
+      const taskIds = updates.map((update) => update.id)
+
+      const existingTasks = await db.query.tasks.findMany({
+        where: (tasks, { and, inArray }) =>
+          and(
+            inArray(tasks.id, taskIds),
+            eq(tasks.workspaceId, workspaceId),
+            eq(tasks.projectId, projectId)
+          ),
+      })
+
+      if (existingTasks.length !== taskIds.length) {
+        return c.json(
+          {
+            success: false,
+            data: null,
+            error: {
+              message:
+                "One or more tasks not found or not in this workspace/project.",
+            },
+          },
+          HttpStatusCodes.BAD_REQUEST
+        )
+      }
+
+      const updatedTasks = await db.transaction(async (tx) => {
+        const results = []
+        for (const update of updates) {
+          const updatedTask = await tx
+            .update(tasks)
+            .set({
+              ...update,
+            })
+            .where(eq(tasks.id, update.id))
+            .returning()
+
+          results.push(updatedTask)
+        }
+        return results
+      })
+
+      return c.json(
+        {
+          success: true,
+          data: updatedTasks.flat(),
+          error: null,
+        },
+        HttpStatusCodes.OK
       )
     }
   )

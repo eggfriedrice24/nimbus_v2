@@ -24,6 +24,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Nimbus",
   description: "Staying above the clouds of productivity.",
+  icons: [{ rel: "icon", url: "/favicon.png" }],
 }
 
 export default async function RootLayout({

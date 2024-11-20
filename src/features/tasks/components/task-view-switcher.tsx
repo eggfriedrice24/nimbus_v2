@@ -9,11 +9,13 @@ import { TailSpin } from "@/components/tailspin"
 import { Button } from "@/components/ui/button"
 import { DottedSeparator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useProjectId } from "@/features/projects/hooks/use-project-id"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { type Task } from "@/server/db/schema/tasks"
 
 import { useCreateTaskModal } from "../hooks/use-create-task-modal"
 import { useTaskFilters } from "../hooks/use-task-filters"
+import { useBatchUpdateTasks } from "../services/use-batch-update-tasks"
 import { useGettasks } from "../services/use-get-tasks"
 import { CreateTaskModal } from "./create-task-modal"
 import TasksKanbanBoard from "./data-kanban/data-kanban"
@@ -28,6 +30,7 @@ export function TaskViewSwitcher() {
   const { open } = useCreateTaskModal()
 
   const workspaceId = useWorkspaceId()
+  const projectIdParam = useProjectId()
 
   const [{ projectId, dueDate, assigneeId, label, status, priority }] =
     useTaskFilters()
@@ -44,12 +47,16 @@ export function TaskViewSwitcher() {
     },
   })
 
+  const { mutate } = useBatchUpdateTasks()
+
   const onKanbanChange = React.useCallback(
     (tasks: { id: string; status: Task["status"]; position: number }[]) => {
-      console.log({ tasks })
-      console.log(tasks.length)
+      mutate({
+        json: { updates: tasks },
+        query: { projectId: projectIdParam, workspaceId },
+      })
     },
-    []
+    [mutate, projectIdParam, workspaceId]
   )
 
   return (

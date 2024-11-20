@@ -8,28 +8,13 @@ import {
   Droppable,
   type DropResult,
 } from "@hello-pangea/dnd"
-import { formatDistance, isPast } from "date-fns"
-import { Calendar, MoreVertical } from "lucide-react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Card, CardContent } from "@/components/ui/card"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
 import { type Task } from "@/server/db/schema/tasks"
 
-import {
-  getLabelBadgeVariantAndIcon,
-  getPriorityIcon,
-  getStatusIcon,
-} from "../../lib/utils"
+import { KanbanCard } from "./kanban-card"
+import { KanbanColumnHeader } from "./kanban-col-header"
 
 const statusColumns: Task["status"][] = [
   "backlog",
@@ -180,22 +165,13 @@ export default function TasksKanbanBoard({
       <ScrollArea className="max-w-[calc(100vw-22rem)]">
         <div className="flex w-max space-x-4 p-4">
           {statusColumns.map((column) => {
-            const { icon: ColHeaderIcon, color } = getStatusIcon(column)
             return (
               <div key={column} className="w-80 shrink-0">
                 <Card className="rounded-xl">
-                  <CardHeader className="rounded-t-xl">
-                    <CardTitle className="flex items-center text-xl font-semibold">
-                      <ColHeaderIcon className={cn("mr-2 size-5", color)} />
-                      <span className="ml-2 capitalize">{column}</span>
-                      <Badge
-                        className="ml-auto rounded-full"
-                        variant="secondary"
-                      >
-                        {tasksState[column].length}
-                      </Badge>
-                    </CardTitle>
-                  </CardHeader>
+                  <KanbanColumnHeader
+                    column={column}
+                    count={tasksState[column].length}
+                  />
 
                   <Droppable droppableId={column}>
                     {(provided) => (
@@ -211,10 +187,6 @@ export default function TasksKanbanBoard({
                             index={index}
                           >
                             {(provided) => {
-                              const { icon: LabelIcon, variant } =
-                                getLabelBadgeVariantAndIcon(task.label)
-                              const { icon: PriorityIcon, color } =
-                                getPriorityIcon(task.priority)
                               return (
                                 <div
                                   ref={provided.innerRef}
@@ -222,88 +194,7 @@ export default function TasksKanbanBoard({
                                   {...provided.dragHandleProps}
                                   className="mb-3 rounded-xl border bg-background p-4 shadow-sm transition-all hover:shadow-md"
                                 >
-                                  <div className="flex flex-col gap-2">
-                                    <div className="flex items-center justify-between">
-                                      <h3 className="text-sm font-medium">
-                                        {task.title}
-                                      </h3>
-                                      <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                          <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="size-8"
-                                          >
-                                            <MoreVertical className="size-4" />
-                                            <span className="sr-only">
-                                              More options
-                                            </span>
-                                          </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                          <DropdownMenuItem>
-                                            Delete
-                                          </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                      </DropdownMenu>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                      <Badge
-                                        variant={variant}
-                                        className="capitalize"
-                                      >
-                                        {
-                                          <LabelIcon
-                                            className={cn("mr-1 size-4")}
-                                          />
-                                        }
-                                        {task.label}
-                                      </Badge>
-                                      <Badge
-                                        className="capitalize"
-                                        variant="outline"
-                                      >
-                                        <PriorityIcon
-                                          className={cn("mr-2 size-4", color)}
-                                        />
-                                        {task.priority}
-                                      </Badge>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                      <div className="flex items-center gap-2">
-                                        <Avatar className="size-6">
-                                          <AvatarImage src="#" />
-                                          <AvatarFallback>TK</AvatarFallback>
-                                        </Avatar>
-                                        <span className="text-xs text-gray-500">
-                                          Tako Kikoria
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center gap-1">
-                                        <Calendar
-                                          className={cn(
-                                            "size-3.5",
-                                            isPast(task.dueDate)
-                                              ? "text-destructive"
-                                              : undefined
-                                          )}
-                                        />
-                                        <span
-                                          className={cn(
-                                            "text-xs",
-                                            isPast(task.dueDate)
-                                              ? "text-destructive"
-                                              : undefined
-                                          )}
-                                        >
-                                          {formatDistance(
-                                            new Date(),
-                                            task.dueDate
-                                          )}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
+                                  <KanbanCard task={task} />
                                 </div>
                               )
                             }}
