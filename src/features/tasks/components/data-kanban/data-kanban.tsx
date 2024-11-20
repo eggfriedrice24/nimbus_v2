@@ -105,6 +105,7 @@ export default function TasksKanbanBoard({
         position: number
       }[] = []
 
+      // @ts-expect-error sad
       setTasksState((prev) => {
         const newTasks = { ...prev }
 
