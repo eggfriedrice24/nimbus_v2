@@ -53,11 +53,18 @@ export function getPriorityIcon(priority: Task["priority"]): {
 
 export function getLabelBadgeVariant(
   label: Task["label"]
-): "default" | "secondary" | "destructive" | "outline" | null | undefined {
+):
+  | "default"
+  | "secondary"
+  | "destructive"
+  | "outline"
+  | "success"
+  | null
+  | undefined {
   const variants = {
     bug: "destructive",
     enhancement: "default",
-    feature: "outline",
+    feature: "success",
     documentation: "secondary",
   }
 
@@ -67,6 +74,7 @@ export function getLabelBadgeVariant(
       | "secondary"
       | "destructive"
       | "outline"
+      | "success"
       | null
       | undefined) ?? "outline"
   )
