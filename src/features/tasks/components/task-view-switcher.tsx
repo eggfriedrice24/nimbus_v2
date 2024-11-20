@@ -10,11 +10,13 @@ import { Button } from "@/components/ui/button"
 import { DottedSeparator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
+import { type Task } from "@/server/db/schema/tasks"
 
 import { useCreateTaskModal } from "../hooks/use-create-task-modal"
 import { useTaskFilters } from "../hooks/use-task-filters"
 import { useGettasks } from "../services/use-get-tasks"
 import { CreateTaskModal } from "./create-task-modal"
+import TasksKanbanBoard from "./data-kanban/data-kanban"
 import { DataTableSkeleton } from "./data-table/data-table-skeleton"
 import { TasksTable } from "./data-table/tasks-table"
 import { TasksDataFilters } from "./tasks-data-filters"
@@ -41,6 +43,14 @@ export function TaskViewSwitcher() {
       priority,
     },
   })
+
+  const onKanbanChange = React.useCallback(
+    (tasks: { id: string; status: Task["status"]; position: number }[]) => {
+      console.log({ tasks })
+      console.log(tasks.length)
+    },
+    []
+  )
 
   return (
     <>
@@ -80,7 +90,13 @@ export function TaskViewSwitcher() {
         <div className="flex w-full flex-1">
           <TabsContent value="kanban">
             {isLoading && <TailSpin />}
-            {!isLoading && tasks?.data && JSON.stringify(tasks)}
+            {!isLoading && tasks?.data && (
+              <TasksKanbanBoard
+                // @ts-expect-error sad
+                tasks={tasks.data}
+                onKanbanChange={onKanbanChange}
+              />
+            )}
           </TabsContent>
           <TabsContent value="table" className="flex-1">
             {isLoading && (

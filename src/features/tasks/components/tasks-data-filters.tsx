@@ -29,7 +29,7 @@ import {
   type StatusEnum,
 } from "../hooks/use-task-filters"
 import {
-  getLabelBadgeVariant,
+  getLabelBadgeVariantAndIcon,
   getPriorityIcon,
   getStatusIcon,
 } from "../lib/utils"
@@ -149,11 +149,17 @@ export function TasksDataFilters() {
             <SelectItem value="all">All</SelectItem>
           </SelectGroup>
           <SelectGroup>
-            {tasks.label.enumValues.map((item) => (
-              <SelectItem key={item} value={item} className="capitalize">
-                <Badge variant={getLabelBadgeVariant(item)}>{item}</Badge>
-              </SelectItem>
-            ))}
+            {tasks.label.enumValues.map((item) => {
+              const { icon: Icon, variant } = getLabelBadgeVariantAndIcon(item)
+              return (
+                <SelectItem key={item} value={item} className="capitalize">
+                  <Badge variant={variant}>
+                    <Icon className={cn("mr-2 size-4")} />
+                    {item}
+                  </Badge>
+                </SelectItem>
+              )
+            })}
           </SelectGroup>
         </SelectContent>
       </Select>

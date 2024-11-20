@@ -9,6 +9,7 @@ import {
   QuestionMarkCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons"
+import { AlertCircle, ArrowRightCircle, FileText, Zap } from "lucide-react"
 
 import { type Task } from "@/server/db/schema/tasks"
 
@@ -51,16 +52,24 @@ export function getPriorityIcon(priority: Task["priority"]): {
   )
 }
 
-export function getLabelBadgeVariant(
-  label: Task["label"]
-):
+type BadgeVariants =
   | "default"
   | "secondary"
   | "destructive"
   | "outline"
   | "success"
-  | null
-  | undefined {
+
+export const labelIcons = {
+  bug: AlertCircle,
+  feature: Zap,
+  enhancement: ArrowRightCircle,
+  documentation: FileText,
+}
+
+export function getLabelBadgeVariantAndIcon(label: Task["label"]): {
+  variant: BadgeVariants
+  icon: React.ElementType
+} {
   const variants = {
     bug: "destructive",
     enhancement: "default",
@@ -68,14 +77,8 @@ export function getLabelBadgeVariant(
     documentation: "secondary",
   }
 
-  return (
-    (variants[label] as
-      | "default"
-      | "secondary"
-      | "destructive"
-      | "outline"
-      | "success"
-      | null
-      | undefined) ?? "outline"
-  )
+  return {
+    variant: (variants[label] as BadgeVariants) ?? ("outline" as BadgeVariants),
+    icon: labelIcons[label] ?? null,
+  }
 }

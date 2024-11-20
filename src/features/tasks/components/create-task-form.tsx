@@ -46,7 +46,7 @@ import { tasks } from "@/server/db/schema"
 import { insertTasksSchema } from "@/server/db/schema/tasks"
 
 import {
-  getLabelBadgeVariant,
+  getLabelBadgeVariantAndIcon,
   getPriorityIcon,
   getStatusIcon,
 } from "../lib/utils"
@@ -264,17 +264,22 @@ export function CreateTaskForm() {
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
-                      {tasks.label.enumValues.map((item) => (
-                        <SelectItem
-                          key={item}
-                          value={item}
-                          className="capitalize"
-                        >
-                          <Badge variant={getLabelBadgeVariant(item)}>
-                            {item}
-                          </Badge>
-                        </SelectItem>
-                      ))}
+                      {tasks.label.enumValues.map((item) => {
+                        const { icon: Icon, variant } =
+                          getLabelBadgeVariantAndIcon(item)
+                        return (
+                          <SelectItem
+                            key={item}
+                            value={item}
+                            className="capitalize"
+                          >
+                            <Badge variant={variant}>
+                              <Icon className={cn("mr-2 size-4")} />
+                              {item}
+                            </Badge>
+                          </SelectItem>
+                        )
+                      })}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

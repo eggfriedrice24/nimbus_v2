@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils"
 import { tasks, type Task } from "@/server/db/schema/tasks"
 
 import {
-  getLabelBadgeVariant,
+  getLabelBadgeVariantAndIcon,
   getPriorityIcon,
   getStatusIcon,
 } from "../../lib/utils"
@@ -77,10 +77,19 @@ export function getColumns(): ColumnDef<Task>[] {
           (label) => label === row.original.label
         )
 
+        if (!label) {
+          return null
+        }
+
+        const { icon: Icon, variant } = getLabelBadgeVariantAndIcon(label)
+
         return (
           <div className="flex space-x-2">
             {label && (
-              <Badge variant={getLabelBadgeVariant(label)}>{label}</Badge>
+              <Badge variant={variant}>
+                <Icon className={cn("mr-2 size-4")} />
+                {label}
+              </Badge>
             )}
             <span className="max-w-[31.25rem] truncate font-medium">
               {row.getValue("title")}
