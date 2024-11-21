@@ -5,6 +5,7 @@ import * as React from "react"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { type ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
+import { Edit, Edit2, Edit3, SearchCode } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -25,12 +26,13 @@ import {
 import { cn } from "@/lib/utils"
 import { tasks, type Task } from "@/server/db/schema/tasks"
 
+import { DataTableColumnHeader } from "../../../../components/data-table/data-table-column-header"
 import {
   getLabelBadgeVariantAndIcon,
   getPriorityIcon,
   getStatusIcon,
 } from "../../lib/utils"
-import { DataTableColumnHeader } from "../../../../components/data-table/data-table-column-header"
+import { DeleteTaskAlert } from "../delete-task-dialog"
 
 export function getColumns(): ColumnDef<Task>[] {
   return [
@@ -119,9 +121,6 @@ export function getColumns(): ColumnDef<Task>[] {
           </div>
         )
       },
-      filterFn: (row, id, value) => {
-        return Array.isArray(value) && value.includes(row.getValue(id))
-      },
     },
     {
       accessorKey: "priority",
@@ -144,9 +143,6 @@ export function getColumns(): ColumnDef<Task>[] {
           </div>
         )
       },
-      filterFn: (row, id, value) => {
-        return Array.isArray(value) && value.includes(row.getValue(id))
-      },
     },
     {
       accessorKey: "createdAt",
@@ -158,42 +154,58 @@ export function getColumns(): ColumnDef<Task>[] {
     {
       id: "actions",
       cell: function Cell() {
+        const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false)
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                aria-label="Open menu"
-                variant="ghost"
-                className="flex size-8 p-0 data-[state=open]:bg-muted"
-              >
-                <DotsHorizontalIcon className="size-4" aria-hidden="true" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  <DropdownMenuRadioGroup>
-                    {tasks.label.enumValues.map((label) => (
-                      <DropdownMenuRadioItem
-                        key={label}
-                        value={label}
-                        className="capitalize"
-                      >
-                        {label}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                Delete
-                <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="flex size-8 p-0 data-[state=open]:bg-muted"
+                >
+                  <DotsHorizontalIcon className="size-4" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem className="flex items-center justify-between">
+                  Edit
+                  <Edit />
+                </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup>
+                      {tasks.label.enumValues.map((label) => (
+                        <DropdownMenuRadioItem
+                          key={label}
+                          value={label}
+                          className="capitalize"
+                        >
+                          {label}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                <DropdownMenuItem className="flex items-center justify-between">
+                  Details <SearchCode />
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setDeleteAlertOpen(true)}>
+                  Delete
+                  <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DeleteTaskAlert
+              open={deleteAlertOpen}
+              onOpenChange={setDeleteAlertOpen}
+            />
+          </>
         )
       },
     },

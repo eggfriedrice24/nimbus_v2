@@ -3,6 +3,7 @@ import { eq } from "drizzle-orm"
 import { Hono } from "hono"
 import { customAlphabet } from "nanoid"
 import * as HttpStatusCodes from "stoker/http-status-codes"
+import * as HttpStatusPhrases from "stoker/http-status-phrases"
 import { z } from "zod"
 
 import { getMember } from "@/features/members/lib/queries"
@@ -16,6 +17,54 @@ import {
 import { sessionMiddleware } from "@/server/session-middleware"
 
 const app = new Hono()
+  .delete(
+    "/:taskId",
+    zValidator("param", z.object({ taskId: z.string() })),
+    sessionMiddleware,
+    async (c) => {
+      const user = c.get("user")
+
+      const { taskId } = c.req.valid("param")
+
+      const task = await db.query.tasks.findFirst({
+        where: eq(tasks.id, taskId),
+      })
+
+      if (!task) {
+        return c.json(
+          {
+            success: true,
+            data: null,
+            error: HttpStatusPhrases.NOT_FOUND,
+          },
+          HttpStatusCodes.OK
+        )
+      }
+
+      const member = await getMember(task.workspaceId, user.id ?? "")
+      if (!member) {
+        return c.json(
+          {
+            success: false,
+            data: null,
+            error: { message: "Unauthorized." },
+          },
+          HttpStatusCodes.FORBIDDEN
+        )
+      }
+
+      await db.delete(tasks).where(eq(tasks.id, task.id))
+
+      return c.json(
+        {
+          success: true,
+          data: { id: task.id },
+          error: null,
+        },
+        HttpStatusCodes.OK
+      )
+    }
+  )
   .get(
     "/",
     sessionMiddleware,
