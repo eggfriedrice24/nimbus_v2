@@ -56,25 +56,6 @@ export default function TasksKanbanBoard({
     return initialTasks
   })
 
-  React.useEffect(() => {
-    const newTasks: TasksState = {
-      backlog: [],
-      todo: [],
-      "in-progress": [],
-      "in-review": [],
-      done: [],
-      canceled: [],
-    }
-
-    tasks.forEach((t) => newTasks[t.status].push(t))
-
-    Object.keys(newTasks).forEach((s) =>
-      newTasks[s as Task["status"]].sort((a, b) => a.position - b.position)
-    )
-
-    setTasksState(newTasks)
-  }, [tasks])
-
   const onDragEnd = React.useCallback(
     (result: DropResult) => {
       if (!result.destination) return
