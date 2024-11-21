@@ -26,12 +26,14 @@ import { cn } from "@/lib/utils"
 import { tasks, type Task } from "@/server/db/schema/tasks"
 
 import { DataTableColumnHeader } from "../../../../components/data-table/data-table-column-header"
+import { useUpdateTaskModal } from "../../hooks/use-update-task-modal"
 import {
   getLabelBadgeVariantAndIcon,
   getPriorityIcon,
   getStatusIcon,
 } from "../../lib/utils"
 import { DeleteTaskAlert } from "../delete-task-dialog"
+import { UpdateTaskModal } from "../update-task-modal"
 
 export function getColumns(): ColumnDef<Task>[] {
   return [
@@ -130,8 +132,21 @@ export function getColumns(): ColumnDef<Task>[] {
       id: "actions",
       cell: function Cell({ row }) {
         const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false)
+        const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false)
         return (
           <>
+            <UpdateTaskModal
+              initialValues={row.original}
+              updateDialogOpen={updateDialogOpen}
+              setUpdateDialogOpen={setUpdateDialogOpen}
+            />
+
+            <DeleteTaskAlert
+              task={row}
+              open={deleteAlertOpen}
+              onOpenChange={setDeleteAlertOpen}
+            />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -143,7 +158,10 @@ export function getColumns(): ColumnDef<Task>[] {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem className="flex items-center justify-between">
+                <DropdownMenuItem
+                  className="flex items-center justify-between"
+                  onClick={() => setUpdateDialogOpen(true)}
+                >
                   Edit
                   <Edit />
                 </DropdownMenuItem>
@@ -175,12 +193,6 @@ export function getColumns(): ColumnDef<Task>[] {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            <DeleteTaskAlert
-              task={row}
-              open={deleteAlertOpen}
-              onOpenChange={setDeleteAlertOpen}
-            />
           </>
         )
       },
