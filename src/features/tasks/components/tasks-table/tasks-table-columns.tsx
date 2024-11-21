@@ -2,38 +2,20 @@
 
 import * as React from "react"
 
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { type ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { Edit, SearchCode } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { tasks, type Task } from "@/server/db/schema/tasks"
 
 import { DataTableColumnHeader } from "../../../../components/data-table/data-table-column-header"
-import { useUpdateTaskModal } from "../../hooks/use-update-task-modal"
 import {
   getLabelBadgeVariantAndIcon,
   getPriorityIcon,
   getStatusIcon,
 } from "../../lib/utils"
-import { DeleteTaskAlert } from "../delete-task-dialog"
-import { UpdateTaskModal } from "../update-task-modal"
+import { TaskActionsDropdown } from "../task-actions-dropdown"
 
 export function getColumns(): ColumnDef<Task>[] {
   return [
@@ -131,70 +113,7 @@ export function getColumns(): ColumnDef<Task>[] {
     {
       id: "actions",
       cell: function Cell({ row }) {
-        const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false)
-        const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false)
-        return (
-          <>
-            <UpdateTaskModal
-              initialValues={row.original}
-              updateDialogOpen={updateDialogOpen}
-              setUpdateDialogOpen={setUpdateDialogOpen}
-            />
-
-            <DeleteTaskAlert
-              task={row}
-              open={deleteAlertOpen}
-              onOpenChange={setDeleteAlertOpen}
-            />
-
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Open menu"
-                  variant="ghost"
-                  className="flex size-8 p-0 data-[state=open]:bg-muted"
-                >
-                  <DotsHorizontalIcon className="size-4" aria-hidden="true" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem
-                  className="flex items-center justify-between"
-                  onClick={() => setUpdateDialogOpen(true)}
-                >
-                  Edit
-                  <Edit />
-                </DropdownMenuItem>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuRadioGroup>
-                      {tasks.label.enumValues.map((label) => (
-                        <DropdownMenuRadioItem
-                          key={label}
-                          value={label}
-                          className="capitalize"
-                        >
-                          {label}
-                        </DropdownMenuRadioItem>
-                      ))}
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                <DropdownMenuItem className="flex items-center justify-between">
-                  Details <SearchCode />
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setDeleteAlertOpen(true)}>
-                  Delete
-                  <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
-        )
+        return <TaskActionsDropdown task={row.original} view="table" />
       },
     },
   ]

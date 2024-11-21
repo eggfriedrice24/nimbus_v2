@@ -1,19 +1,13 @@
 import { formatDistance, isPast } from "date-fns"
-import { Calendar, MoreVertical } from "lucide-react"
+import { Calendar } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { type Task } from "@/server/db/schema/tasks"
 
 import { getLabelBadgeVariantAndIcon, getPriorityIcon } from "../../lib/utils"
+import { TaskActionsDropdown } from "../task-actions-dropdown"
 
 export function KanbanCard({ task }: { task: Task }) {
   const { icon: LabelIcon, variant } = getLabelBadgeVariantAndIcon(task.label)
@@ -22,18 +16,8 @@ export function KanbanCard({ task }: { task: Task }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium">{task.title}</h3>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="size-8">
-              <MoreVertical className="size-4" />
-              <span className="sr-only">More options</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <h3 className="text-base font-bold">{task.title}</h3>
+        <TaskActionsDropdown task={task} view="kanban" />
       </div>
       <div className="flex items-center gap-2">
         <Badge variant={variant} className="capitalize">
