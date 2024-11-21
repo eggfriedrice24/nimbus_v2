@@ -19,21 +19,21 @@ import { sessionMiddleware } from "@/server/session-middleware"
 const app = new Hono()
   .delete(
     "/:taskId",
-    zValidator("param", z.object({ taskId: z.string() })),
     sessionMiddleware,
+    zValidator("param", z.object({ taskId: z.string() })),
     async (c) => {
       const user = c.get("user")
 
       const { taskId } = c.req.valid("param")
 
       const task = await db.query.tasks.findFirst({
-        where: eq(tasks.id, taskId),
+        where: (schema, { eq }) => eq(schema.id, taskId),
       })
 
       if (!task) {
         return c.json(
           {
-            success: true,
+            success: false,
             data: null,
             error: HttpStatusPhrases.NOT_FOUND,
           },

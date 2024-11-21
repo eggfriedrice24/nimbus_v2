@@ -45,6 +45,7 @@ import { cn } from "@/lib/utils"
 import { tasks } from "@/server/db/schema"
 import { insertTasksSchema } from "@/server/db/schema/tasks"
 
+import { useCreateTaskModal } from "../hooks/use-create-task-modal"
 import {
   getLabelBadgeVariantAndIcon,
   getPriorityIcon,
@@ -62,7 +63,9 @@ export function CreateTaskForm() {
     workspaceId,
   })
 
-  const { mutate, isPending } = useCreateTask()
+  const { close } = useCreateTaskModal()
+
+  const { mutate, isPending } = useCreateTask({ dialogOpen: close })
 
   const form = useForm<CreateTaskSchemaType>({
     resolver: zodResolver(insertTasksSchema),

@@ -11,7 +11,11 @@ type RequestType = InferRequestType<
   (typeof client.api.tasks)[":taskId"]["$delete"]
 >
 
-export function useDeleteTask() {
+export function useDeleteTask({
+  dialogOpen,
+}: {
+  dialogOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) {
   const queryClient = useQueryClient()
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
@@ -28,10 +32,13 @@ export function useDeleteTask() {
     },
     onSuccess: ({ data }) => {
       toast.success("Task Deleted Successfully! 🎉")
+
       void queryClient.invalidateQueries({ queryKey: ["tasks"] })
       void queryClient.invalidateQueries({
         queryKey: ["tasks", data?.id],
       })
+
+      dialogOpen(false)
     },
     onError: () => {
       toast.error("Failed to Delete Task! ❌")

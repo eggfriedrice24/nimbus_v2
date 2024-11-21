@@ -5,11 +5,10 @@ import * as React from "react"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { type ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { Edit, Edit2, Edit3, SearchCode } from "lucide-react"
+import { Edit, SearchCode } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,30 +35,6 @@ import { DeleteTaskAlert } from "../delete-task-dialog"
 
 export function getColumns(): ColumnDef<Task>[] {
   return [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-          className="translate-y-0.5"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-          className="translate-y-0.5"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
     {
       accessorKey: "code",
       header: ({ column }) => (
@@ -153,7 +128,7 @@ export function getColumns(): ColumnDef<Task>[] {
     },
     {
       id: "actions",
-      cell: function Cell() {
+      cell: function Cell({ row }) {
         const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false)
         return (
           <>
@@ -202,6 +177,7 @@ export function getColumns(): ColumnDef<Task>[] {
             </DropdownMenu>
 
             <DeleteTaskAlert
+              task={row}
               open={deleteAlertOpen}
               onOpenChange={setDeleteAlertOpen}
             />

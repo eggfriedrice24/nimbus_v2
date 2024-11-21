@@ -1,5 +1,7 @@
 "use client"
 
+import { type Row } from "@tanstack/react-table"
+
 import { TailSpin } from "@/components/tailspin"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,23 +12,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { type Task } from "@/server/db/schema/tasks"
 
-import { useTaskId } from "../hooks/use-task-id"
 import { useDeleteTask } from "../services/use-delete-task"
 
 export function DeleteTaskAlert({
   open,
   onOpenChange,
+  task,
 }: {
   open: boolean
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+  task: Row<Task>
 }) {
-  const taskId = useTaskId()
-
-  const { mutate, isPending } = useDeleteTask()
+  const { mutate, isPending } = useDeleteTask({ dialogOpen: onOpenChange })
 
   const handleDelete = async () => {
-    mutate({ param: { taskId } })
+    mutate({ param: { taskId: task.original.id } })
   }
 
   return (
@@ -40,7 +42,9 @@ export function DeleteTaskAlert({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="secondary">Cancel</Button>
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
           <Button
             variant="destructive"
             onClick={handleDelete}
