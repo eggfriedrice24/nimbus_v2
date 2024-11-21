@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { type InferRequestType, type InferResponseType } from "hono"
+import { type InferResponseType } from "hono"
 import { type z } from "zod"
 
 import { type selectTasksSchema } from "@/server/db/schema/tasks"

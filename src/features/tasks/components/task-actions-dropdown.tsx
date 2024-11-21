@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { useRouter } from "next/navigation"
+
 import { DotsHorizontalIcon, DotsVerticalIcon } from "@radix-ui/react-icons"
 import { Edit, SearchCode } from "lucide-react"
 
@@ -29,8 +31,15 @@ export function TaskActionsDropdown({
   task: Task
   view: "kanban" | "table"
 }) {
+  const router = useRouter()
+
   const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false)
   const [updateDialogOpen, setUpdateDialogOpen] = React.useState(false)
+
+  const navigateToTaskDetails = () =>
+    router.push(
+      `/workspaces/${task.workspaceId}/projects/${task.project.id}/tasks/${task.id}`
+    )
 
   return (
     <>
@@ -85,7 +94,10 @@ export function TaskActionsDropdown({
             </DropdownMenuSubContent>
           </DropdownMenuSub>
 
-          <DropdownMenuItem className="flex items-center justify-between">
+          <DropdownMenuItem
+            className="flex items-center justify-between"
+            onClick={navigateToTaskDetails}
+          >
             Details <SearchCode />
           </DropdownMenuItem>
 
