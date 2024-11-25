@@ -1,8 +1,11 @@
+import "server-only"
+
 import { cookies } from "next/headers"
 
 import { eq } from "drizzle-orm"
 import { decode } from "hono/jwt"
 
+import { env } from "@/env"
 import { db } from "@/server/db"
 import { users } from "@/server/db/schema"
 import { type User } from "@/server/db/schema/user"
@@ -28,7 +31,7 @@ export const getUserById = async (id: string) => {
 }
 
 export const getServerSession = async () => {
-  const session = cookies().get("nimbus-auth-cookie")
+  const session = cookies().get(env.NIMBUS_AUTH_COOKIE)
 
   if (!session) {
     return null

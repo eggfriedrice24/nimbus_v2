@@ -5,6 +5,7 @@ import { deleteCookie, setCookie } from "hono/cookie"
 import { sign } from "hono/jwt"
 import * as HttpStatusCodes from "stoker/http-status-codes"
 
+import { env } from "@/env"
 import { db } from "@/server/db"
 import { users } from "@/server/db/schema/user"
 import { sessionMiddleware } from "@/server/session-middleware"
@@ -41,16 +42,14 @@ const app = new Hono()
       name: user.name,
     }
 
-    const secret = "mysecret"
-    const token = await sign(jwtPayoload, secret)
+    const token = await sign(jwtPayoload, env.JWT_SECRET)
 
-    setCookie(c, "nimbus-auth-cookie", token, {
-      expires: new Date(new Date().setDate(new Date().getDate() + 7)),
+    setCookie(c, env.NIMBUS_AUTH_COOKIE, token, {
       secure: true,
       sameSite: "Strict",
       httpOnly: true,
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24,
     })
 
     return c.json({ data: { token } })
@@ -77,7 +76,7 @@ const app = new Hono()
     return c.json(inserted, HttpStatusCodes.CREATED)
   })
   .post("/logout", sessionMiddleware, (c) => {
-    deleteCookie(c, "nimbus-auth-cookie")
+    deleteCookie(c, env.NIMBUS_AUTH_COOKIE)
 
     return c.json({ success: true })
   })

@@ -19,6 +19,7 @@ export function useGetProjects({ workspaceId }: { workspaceId: string }) {
 
       return projects
     },
+    enabled: !!workspaceId,
   })
 
   return mutation

@@ -1,11 +1,15 @@
 import "server-only"
 
-import { getCookie } from "hono/cookie"
+import { deleteCookie, getCookie } from "hono/cookie"
 import { createMiddleware } from "hono/factory"
-import { decode } from "hono/jwt"
+import { verify } from "hono/jwt"
 import * as HttpStatusCodes from "stoker/http-status-codes"
 
+import { env } from "@/env"
+
 import { type User } from "./db/schema/user"
+
+const tokenBlacklist = new Set<string>()
 
 type AdditionalContext = {
   Variables: {
@@ -15,16 +19,40 @@ type AdditionalContext = {
 
 export const sessionMiddleware = createMiddleware<AdditionalContext>(
   async (c, next) => {
-    const session = getCookie(c, "nimbus-auth-cookie")
+    const token = getCookie(c, env.NIMBUS_AUTH_COOKIE)
 
-    if (!session) {
+    if (!token) {
       return c.json({ error: "Unauthorized" }, HttpStatusCodes.UNAUTHORIZED)
     }
 
-    const user = decode(session).payload as User
+    try {
+      const payload = await verify(token, env.JWT_SECRET)
 
-    c.set("user", user)
+      if (tokenBlacklist.has(token)) {
+        deleteCookie(c, env.NIMBUS_AUTH_COOKIE)
+        return c.json(
+          { error: "Token is expired" },
+          HttpStatusCodes.UNAUTHORIZED
+        )
+      }
 
-    await next()
+      c.set("user", payload as Partial<User>)
+
+      await next()
+    } catch {
+      deleteCookie(c, env.NIMBUS_AUTH_COOKIE)
+      return c.json(
+        { error: "Invalid or expired token" },
+        HttpStatusCodes.UNAUTHORIZED
+      )
+    }
   }
 )
+
+export const invalidateToken = (token: string) => {
+  tokenBlacklist.add(token)
+}
+
+export const isTokenBlacklisted = (token: string) => {
+  return tokenBlacklist.has(token)
+}

@@ -137,7 +137,7 @@ export function AppSidebar() {
                 user={{
                   name: session?.session.name ?? "",
                   email: session?.session.email ?? "",
-                  avatar: "/avatars/shadcn.jpg",
+                  avatar: "/avatars/02.png",
                 }}
               />
             ) : (
