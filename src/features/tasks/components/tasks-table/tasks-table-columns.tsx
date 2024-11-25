@@ -6,6 +6,7 @@ import { type ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 
 import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { tasks, type Task } from "@/server/db/schema/tasks"
 
@@ -19,6 +20,30 @@ import { TaskActionsDropdown } from "../task-actions-dropdown"
 
 export function getColumns(): ColumnDef<Task>[] {
   return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+          className="translate-y-0.5"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          className="translate-y-0.5"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: "code",
       header: ({ column }) => (
